@@ -1,3 +1,5 @@
+// Contributor: Dwyane Rasheed Partosa
+// Module: Room Management
 
 const express = require('express');
 const router = express.Router();
