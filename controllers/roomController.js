@@ -1,3 +1,5 @@
+// Contributor: Dwyane Rasheed Partosa
+// Module: Room Management
 
 const roomModel = require('../models/roomModel');
 

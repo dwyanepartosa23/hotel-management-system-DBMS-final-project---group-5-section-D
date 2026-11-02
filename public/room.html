@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rooms & Suites | Lumière Grand</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <a href="index.html" class="brand">
+            <span>LUMIÈRE GRAND</span>
+            <small>HOTEL & HOSPITALITY</small>
+        </a>
+        
+        <nav class="main-nav">
+            <a href="index.html">Home</a>
+            <a href="rooms.html" class="active">Rooms & Suites</a>
+            <a href="reservations.html">Reservations</a>
+            <a href="services.html">Services</a>
+            <a href="about.html">About Us</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-hero">
+            <p class="eyebrow">ACCOMMODATION</p>
+            <h1>Rooms & Suites</h1>
+            <p>Find the perfect accommodation for your stay at Lumière Grand.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>Our Accommodations</h2>
+            <p>Whether you're traveling alone, with family, or looking for an elevated experience, we have a room designed for your needs.</p>
+
+            <div class="room-list" id="roomList">
+                <p>Loading accommodations...</p>
+            </div>
+
+            <div class="center-content">
+                <a href="reservations.html" class="btn">Reserve Your Stay</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>LUMIÈRE GRAND</p>
+        <small>Shining standard of elegance.</small>
+        <small>© 2026 Lumière Grand Hotel & Hospitality</small>
+    </footer>
+
+    <script>
+        async function loadRooms() {
+            const roomList = document.getElementById('roomList');
+
+            try {
+                const response = await fetch('/api/rooms');
+
+                if (!response.ok) {
+                    throw new Error('Failed to retrieve rooms.');
+                }
+
+                const rooms = await response.json();
+
+                // Group physical rooms by room type
+                const roomTypes = new Map();
+
+                rooms.forEach(room => {
+                    if (!roomTypes.has(room.room_type_id)) {
+                        roomTypes.set(room.room_type_id, room);
+                    }
+                });
+
+                const descriptions = {
+                    single: 'A comfortable and welcoming space designed for individual travelers seeking a relaxing stay.',
+                    double: 'A convenient accommodation for two guests, offering a pleasant space to rest and unwind.',
+                    deluxe: 'An upgraded accommodation that combines added comfort with an elegant and relaxing atmosphere.',
+                    family: 'A spacious accommodation designed for families and groups who want to enjoy their stay together.',
+                    suite: 'A more spacious and refined accommodation for guests who appreciate additional room and privacy.'
+                };
+
+                const labels = {
+                    single: '01 — SIMPLE COMFORT',
+                    double: '02 — SHARED COMFORT',
+                    deluxe: '03 — REFINED STAY',
+                    family: '04 — FAMILY MOMENTS',
+                    suite: '05 — ELEVATED LIVING'
+                };
+
+                roomList.innerHTML = '';
+
+                roomTypes.forEach(room => {
+                    const type = room.type_name.toLowerCase();
+                    const card = document.createElement('article');
+
+                    card.className = 'room-card';
+
+                    const title = document.createElement('h3');
+                    title.textContent = type.charAt(0).toUpperCase() + type.slice(1) + ' Room';
+                    if (type === 'suite') {
+                        title.textContent = 'Suite';
+                    }
+
+                    const eyebrow = document.createElement('p');
+                    eyebrow.className = 'eyebrow';
+                    eyebrow.textContent = labels[type] || 'ACCOMMODATION';
+
+                    const description = document.createElement('p');
+                    description.textContent = descriptions[type] || room.description;
+
+                    const capacity = document.createElement('p');
+                    capacity.textContent = `Maximum capacity: ${room.capacity} guest(s)`;
+
+                    const price = document.createElement('p');
+                    price.className = 'room-price';
+                    price.textContent = `₱${Number(room.price_per_night).toLocaleString('en-PH')} / night`;
+
+                    card.append(eyebrow, title, description, capacity, price);
+                    roomList.appendChild(card);
+                });
+
+                if (roomTypes.size === 0) {
+                    roomList.textContent = 'No accommodations are currently available.';
+                }
+
+            } catch (error) {
+                console.error(error);
+                roomList.textContent = 'Unable to load accommodations. Please try again later.';
+            }
+        }
+
+        loadRooms();
+    </script>
+
+</body>
+</html>
