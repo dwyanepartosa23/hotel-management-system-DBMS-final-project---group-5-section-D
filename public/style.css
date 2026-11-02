@@ -1,0 +1,570 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Lato:wght@300;400;500;600;700&display=swap');
+
+/* =================================
+   LUMIÈRE GRAND - MIDNIGHT LUXURY
+================================= */
+
+:root {
+    --black: #080808;
+    --surface: #151515;
+    --surface-light: #1D1D1D;
+    --ivory: #F5F0E1;
+    --champagne: #F7E7CE;
+    --taupe: #B8B09F;
+    --gold: #CDAA70;
+    --border: #39352E;
+
+    --script: 'Great Vibes', cursive;
+    --elegant: 'Cormorant Garamond', serif;
+    --clean: 'Lato', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--elegant);
+    background: var(--black);
+    color: var(--ivory);
+    line-height: 1.8;
+}
+
+/* =================================
+   NAVIGATION
+================================= */
+
+.site-header {
+    width: 100%;
+    min-height: 100px;
+    padding: 20px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    border-bottom: 1px solid var(--border);
+    background: var(--black);
+}
+
+.brand {
+    text-decoration: none;
+    color: var(--champagne);
+    flex-shrink: 0;
+}
+
+.brand span {
+    display: block;
+    font-family: var(--script);
+    font-size: 38px;
+    color: var(--gold);
+    line-height: 1.2;
+}
+
+.brand small {
+    display: block;
+    font-family: var(--clean);
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--taupe);
+    text-align: center;
+    margin-top: 5px;
+}
+
+.main-nav,
+.site-nav {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 25px;
+}
+
+.main-nav a,
+.site-nav a {
+    text-decoration: none;
+    color: var(--ivory);
+    font-family: var(--clean);
+    font-size: 11px;
+    letter-spacing: 1px;
+    transition: 0.3s;
+}
+
+.main-nav a:hover,
+.main-nav a.active,
+.site-nav a:hover,
+.site-nav a.active {
+    color: var(--gold);
+}
+
+/* =================================
+   HERO SECTION
+================================= */
+
+.hero {
+    min-height: 650px;
+    padding: 100px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: var(--black);
+}
+
+.eyebrow {
+    font-family: var(--clean);
+    color: var(--gold);
+    font-size: 10px;
+    letter-spacing: 5px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.hero h1,
+.page-hero h1 {
+    color: var(--champagne);
+    font-family: var(--script);
+    font-size: clamp(65px, 9vw, 105px);
+    font-weight: 400;
+    line-height: 1.3;
+}
+
+.hero h1 span {
+    display: block;
+    color: var(--gold);
+    font-family: var(--script);
+}
+
+.hero-tagline {
+    margin-top: 20px;
+    color: var(--ivory);
+    font-family: var(--elegant);
+    font-size: 25px;
+    font-style: italic;
+}
+
+.hero-description {
+    max-width: 550px;
+    margin: 20px auto 35px;
+    color: var(--taupe);
+    font-family: var(--clean);
+    font-size: 13px;
+}
+
+/* =================================
+   BUTTONS
+================================= */
+
+.primary-button,
+.btn {
+    display: inline-block;
+    padding: 14px 35px;
+    background: var(--gold);
+    color: var(--black);
+    text-decoration: none;
+    font-family: var(--clean);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: 1px solid var(--gold);
+    border-radius: 2px;
+    transition: 0.3s;
+}
+
+.primary-button:hover,
+.btn:hover {
+    background: transparent;
+    color: var(--gold);
+    transform: translateY(-2px);
+}
+
+/* =================================
+   INTRODUCTION
+================================= */
+
+.introduction {
+    padding: 100px 20px;
+    text-align: center;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.introduction h2 {
+    color: var(--champagne);
+    font-family: var(--script);
+    font-size: 60px;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+
+.introduction > p:last-child {
+    max-width: 650px;
+    margin: auto;
+    color: var(--taupe);
+    font-size: 17px;
+}
+
+/* =================================
+   HIGHLIGHTS
+================================= */
+
+.highlights {
+    padding: 90px 7%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    background: var(--black);
+}
+
+.highlight-card {
+    padding: 35px 25px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    transition: 0.3s;
+}
+
+.highlight-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-5px);
+}
+
+.highlight-card span {
+    color: var(--gold);
+    font-family: var(--clean);
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+.highlight-card h3 {
+    color: var(--champagne);
+    font-family: var(--script);
+    font-size: 37px;
+    font-weight: 400;
+    margin: 20px 0 12px;
+}
+
+.highlight-card p {
+    color: var(--taupe);
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.highlight-card a {
+    color: var(--gold);
+    text-decoration: none;
+    font-family: var(--clean);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* =================================
+   INNER PAGE HERO
+================================= */
+
+.page-hero {
+    background: var(--surface);
+    color: var(--ivory);
+    text-align: center;
+    padding: 90px 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.page-hero h1 {
+    font-size: clamp(60px, 8vw, 90px);
+    margin: 10px 0;
+}
+
+.page-hero p {
+    max-width: 650px;
+    margin: 12px auto;
+    color: var(--taupe);
+    line-height: 1.8;
+    font-size: 17px;
+}
+
+/* =================================
+   CONTENT SECTIONS
+================================= */
+
+.content-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 65px 25px;
+}
+
+.content-section h2 {
+    color: var(--champagne);
+    font-family: var(--script);
+    font-size: 48px;
+    font-weight: 400;
+    margin-bottom: 18px;
+}
+
+.content-section > p {
+    line-height: 1.8;
+    color: var(--taupe);
+}
+
+/* =================================
+   ROOM AND SERVICE CARDS
+================================= */
+
+.room-list,
+.service-list,
+.contact-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+    margin-top: 35px;
+}
+
+.room-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 30px;
+    border-radius: 3px;
+    transition: 0.3s;
+}
+
+.room-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-4px);
+}
+
+.room-card h3 {
+    color: var(--champagne);
+    font-family: var(--script);
+    margin: 12px 0;
+    font-size: 38px;
+    font-weight: 400;
+}
+
+.room-card p {
+    line-height: 1.8;
+    color: var(--taupe);
+}
+
+.room-price {
+    color: var(--gold) !important;
+    font-size: 21px;
+    margin-top: 18px;
+}
+
+/* =================================
+   CENTERED CONTENT
+================================= */
+
+.center-content {
+    text-align: center;
+    margin-top: 40px;
+}
+
+/* =================================
+   DINING MENU
+================================= */
+
+.menu-category {
+    margin-top: 40px;
+    border-top: 1px solid var(--border);
+    padding-top: 25px;
+}
+
+.menu-category h3 {
+    color: var(--champagne);
+    font-family: var(--script);
+    font-size: 42px;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+
+.menu-item {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.menu-item h4 {
+    color: var(--ivory);
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.menu-item p {
+    color: var(--taupe);
+    line-height: 1.7;
+}
+
+/* =================================
+   FORMS
+================================= */
+
+.form-container {
+    max-width: 650px;
+    margin: 0 auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 35px;
+    border-radius: 3px;
+}
+
+.form-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.form-container label {
+    color: var(--champagne);
+    font-family: var(--clean);
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+.form-container input,
+.form-container select,
+.form-container textarea {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid var(--border);
+    background: var(--black);
+    color: var(--ivory);
+    font-family: var(--elegant);
+    font-size: 17px;
+    border-radius: 2px;
+}
+
+.form-container input:focus,
+.form-container select:focus,
+.form-container textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+}
+
+.form-container input::placeholder,
+.form-container textarea::placeholder {
+    color: var(--taupe);
+    opacity: 0.8;
+}
+
+.form-container select option {
+    background: var(--surface);
+    color: var(--ivory);
+}
+
+.form-container textarea {
+    resize: vertical;
+}
+
+.form-container button {
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+.form-note {
+    font-size: 15px;
+    color: var(--taupe);
+    margin-top: 20px;
+    line-height: 1.6;
+    font-style: italic;
+}
+
+/* =================================
+   FOOTER
+================================= */
+
+.site-footer {
+    padding: 50px 20px;
+    background: #050505;
+    color: var(--ivory);
+    text-align: center;
+    border-top: 1px solid var(--border);
+}
+
+.site-footer p {
+    color: var(--gold);
+    font-family: var(--script);
+    font-size: 40px;
+    margin-bottom: 5px;
+}
+
+.site-footer small {
+    display: block;
+    color: var(--taupe);
+    font-family: var(--clean);
+    font-size: 11px;
+    margin-top: 10px;
+}
+
+/* =================================
+   RESPONSIVE DESIGN
+================================= */
+
+@media (max-width: 900px) {
+    .site-header {
+        flex-direction: column;
+        padding: 25px 5%;
+    }
+
+    .main-nav,
+    .site-nav {
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .highlights {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-hero {
+        padding: 65px 20px;
+    }
+
+    .content-section {
+        padding: 45px 20px;
+    }
+
+    .form-container {
+        padding: 22px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        min-height: 550px;
+        padding: 70px 20px;
+    }
+
+    .hero h1 {
+        font-size: 65px;
+    }
+
+    .hero-tagline {
+        font-size: 20px;
+    }
+
+    .introduction h2 {
+        font-size: 48px;
+    }
+
+    .main-nav,
+    .site-nav {
+        gap: 12px;
+    }
+
+    .main-nav a,
+    .site-nav a {
+        font-size: 10px;
+    }
+}

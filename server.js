@@ -8,12 +8,8 @@ const app = express();
 
 app.use(express.json());
 
-// Home route
-app.get('/', (req, res) => {
-    res.json({
-        message: 'Hotel Management API is running!'
-    });
-});
+// Serve frontend files
+app.use(express.static('public'));
 
 // Test MySQL connection
 app.get('/api/test-db', async (req, res) => {
@@ -53,12 +49,17 @@ app.use('/api/employees', employeeRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/service-orders', serviceOrderRoutes);
 
-// Handle unknown routes
-app.use((req, res) => {
+// Handle unknown API endpoints
+app.use('/api', (req, res) => {
     res.status(404).json({
         success: false,
         message: 'API endpoint not found.'
     });
+});
+
+// Handle other unknown routes
+app.use((req, res) => {
+    res.status(404).send('Page not found.');
 });
 
 // Start server
