@@ -1,4 +1,3 @@
-
 const express = require('express');
 require('dotenv').config();
 
@@ -40,6 +39,7 @@ const reservationRoutes = require('./routes/reservationRoutes');
 const employeeRoutes = require('./routes/employeeRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 const serviceOrderRoutes = require('./routes/serviceOrderRoutes');
+const invoiceRoutes = require('./routes/invoiceRoutes'); 
 
 // Register API routes
 app.use('/api/guests', guestRoutes);
@@ -48,6 +48,7 @@ app.use('/api/reservations', reservationRoutes);
 app.use('/api/employees', employeeRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/service-orders', serviceOrderRoutes);
+app.use('/api/invoices', invoiceRoutes);
 
 // Handle unknown API endpoints
 app.use('/api', (req, res) => {
