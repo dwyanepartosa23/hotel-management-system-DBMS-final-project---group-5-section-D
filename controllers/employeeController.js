@@ -1,5 +1,4 @@
-
-const employeeModel = require('../models/employeeModel');
+ const employeeModel = require('../models/employeeModel');
 
 async function getEmployees(req, res) {
     try {
@@ -175,4 +174,4 @@ module.exports = {
     createEmployee,
     updateEmployee,
     deleteEmployee
-};
+ };
