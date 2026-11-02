@@ -176,6 +176,12 @@ Completed and ready for final submission.
 | Member 5 | To be filled | `services`, `service_orders`, `inventory_items`, `inventory_transactions` | Services & Inventory | Service Order Report |
 | Member 6 | To be filled | `invoices`, `payments` | Billing & Payments | Invoice & Payment Report |
 
+## ER Diagram
+<p align="center">
+  <img src="er_diagram.png" alt="Hotel Management System ER Diagram" width="850">
+</p>
+
+
 ## Git Collaboration Rules
 - Work on your assigned feature branch.
 - Make meaningful commits using clear commit messages.
