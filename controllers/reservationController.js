@@ -1,4 +1,4 @@
-
+// Contributor: Ricaplaza
 const reservationModel = require('../models/reservationModel');
 
 async function getReservations(req, res) {
