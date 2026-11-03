@@ -6,11 +6,14 @@ const db = require('./models/db');
 const app = express();
 
 app.use(express.json());
-
-// Serve frontend files
 app.use(express.static('public'));
 
-// Test MySQL connection
+app.get('/', (req, res) => {
+    res.json({
+        message: 'Hotel Management API is running!'
+    });
+});
+
 app.get('/api/test-db', async (req, res) => {
     try {
         const [rows] = await db.query(
@@ -32,25 +35,28 @@ app.get('/api/test-db', async (req, res) => {
     }
 });
 
-// Import route files
 const guestRoutes = require('./routes/guestRoutes');
 const roomRoutes = require('./routes/roomRoutes');
+const housekeepingRoutes = require('./routes/housekeepingRoutes');
 const reservationRoutes = require('./routes/reservationRoutes');
 const employeeRoutes = require('./routes/employeeRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 const serviceOrderRoutes = require('./routes/serviceOrderRoutes');
-const invoiceRoutes = require('./routes/invoiceRoutes'); 
+const invoiceRoutes = require('./routes/invoiceRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
+const reportRoutes = require('./routes/reportRoutes');
 
-// Register API routes
 app.use('/api/guests', guestRoutes);
 app.use('/api/rooms', roomRoutes);
+app.use('/api/housekeeping', housekeepingRoutes);
 app.use('/api/reservations', reservationRoutes);
 app.use('/api/employees', employeeRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/service-orders', serviceOrderRoutes);
 app.use('/api/invoices', invoiceRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/reports', reportRoutes);
 
-// Handle unknown API endpoints
 app.use('/api', (req, res) => {
     res.status(404).json({
         success: false,
@@ -58,14 +64,16 @@ app.use('/api', (req, res) => {
     });
 });
 
-// Handle other unknown routes
 app.use((req, res) => {
     res.status(404).send('Page not found.');
 });
 
-// Start server
 const PORT = process.env.PORT || 1234;
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
+});
+
+server.on('error', (error) => {
+    console.error('Server error:', error.message);
 });
