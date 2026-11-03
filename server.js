@@ -1,3 +1,4 @@
+
 const express = require('express');
 require('dotenv').config();
 
@@ -75,5 +76,13 @@ const server = app.listen(PORT, () => {
 });
 
 server.on('error', (error) => {
-    console.error('Server error:', error.message);
+    console.error('Server error:', error);
+});
+
+server.on('close', () => {
+    console.log('Server closed.');
+});
+
+process.on('beforeExit', () => {
+    console.log('Node.js is about to exit.');
 });
