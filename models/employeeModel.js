@@ -1,9 +1,21 @@
- const db = require('./db');
+const db = require('./db');
 
 async function getAllEmployees() {
     const [rows] = await db.query(
-        'SELECT * FROM employees ORDER BY employee_id'
+        `SELECT
+            employees.employee_id,
+            employees.first_name,
+            employees.last_name,
+            employees.phone,
+            employees.email,
+            employees.position_id,
+            position.position_name
+        FROM employees
+        LEFT JOIN position
+            ON employees.position_id = position.position_id
+        ORDER BY employees.employee_id`
     );
+
     return rows;
 }
 
