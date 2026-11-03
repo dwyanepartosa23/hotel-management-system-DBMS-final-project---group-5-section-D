@@ -11,22 +11,31 @@ async function getRooms(req, res) {
     }
 }
 
+async function getRoom(req, res) {
+    try {
+        const room = await roomModel.getRoomById(req.params.id);
+
+        if (!room) {
+            return res.status(404).json({ message: 'Room not found.' });
+        }
+
+        res.status(200).json(room);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ message: 'Failed to retrieve room.' });
+    }
+}
+
 async function createRoom(req, res) {
     try {
         const { room_number, floor_number, room_status, notes, room_type_id } = req.body;
 
         if (!room_number || !room_status || !room_type_id) {
-            return res.status(400).json({
-                message: 'Room number, status, and room type ID are required.'
-            });
+            return res.status(400).json({ message: 'Room number, room status, and room type are required.' });
         }
 
         const roomId = await roomModel.createRoom(
-            room_number,
-            floor_number ?? null,
-            room_status,
-            notes ?? null,
-            room_type_id
+            room_number, floor_number, room_status, notes, room_type_id
         );
 
         res.status(201).json({
@@ -35,96 +44,51 @@ async function createRoom(req, res) {
         });
     } catch (error) {
         console.error(error.message);
-
-        if (error.code === 'ER_DUP_ENTRY') {
-            return res.status(400).json({
-                message: 'That room number already exists.'
-            });
-        }
-
-        if (error.code === 'ER_NO_REFERENCED_ROW_2') {
-            return res.status(400).json({
-                message: 'The specified room type does not exist.'
-            });
-        }
-
         res.status(500).json({ message: 'Failed to create room.' });
     }
 }
 
 async function updateRoom(req, res) {
     try {
-        const roomId = Number(req.params.id);
         const { room_number, floor_number, room_status, notes, room_type_id } = req.body;
 
-        if (!Number.isInteger(roomId) || roomId < 1) {
-            return res.status(400).json({ message: 'Invalid room ID.' });
-        }
-
         if (!room_number || !room_status || !room_type_id) {
-            return res.status(400).json({
-                message: 'Room number, status, and room type ID are required.'
-            });
+            return res.status(400).json({ message: 'Room number, room status, and room type are required.' });
         }
 
         const affectedRows = await roomModel.updateRoom(
-            roomId,
-            room_number,
-            floor_number ?? null,
-            room_status,
-            notes ?? null,
-            room_type_id
+            req.params.id, room_number, floor_number, room_status, notes, room_type_id
         );
 
-        if (affectedRows === 0) {
-            return res.status(404).json({ message: 'Room not found or no changes made.' });
+        if (!affectedRows) {
+            return res.status(404).json({ message: 'Room not found.' });
         }
 
         res.status(200).json({ message: 'Room updated successfully.' });
     } catch (error) {
         console.error(error.message);
-
-        if (error.code === 'ER_DUP_ENTRY') {
-            return res.status(400).json({
-                message: 'That room number already exists.'
-            });
-        }
-
-        if (error.code === 'ER_NO_REFERENCED_ROW_2') {
-            return res.status(400).json({
-                message: 'The specified room type does not exist.'
-            });
-        }
-
         res.status(500).json({ message: 'Failed to update room.' });
     }
 }
 
 async function deleteRoom(req, res) {
     try {
-        const roomId = Number(req.params.id);
+        const affectedRows = await roomModel.deleteRoom(req.params.id);
 
-        if (!Number.isInteger(roomId) || roomId < 1) {
-            return res.status(400).json({ message: 'Invalid room ID.' });
-        }
-
-        const affectedRows = await roomModel.deleteRoom(roomId);
-
-        if (affectedRows === 0) {
+        if (!affectedRows) {
             return res.status(404).json({ message: 'Room not found.' });
         }
 
         res.status(200).json({ message: 'Room deleted successfully.' });
     } catch (error) {
         console.error(error.message);
-        res.status(500).json({
-            message: 'Failed to delete room. It may be referenced by existing reservations.'
-        });
+        res.status(500).json({ message: 'Failed to delete room.' });
     }
 }
 
 module.exports = {
     getRooms,
+    getRoom,
     createRoom,
     updateRoom,
     deleteRoom

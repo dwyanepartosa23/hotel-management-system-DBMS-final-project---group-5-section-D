@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rooms & Suites | Lumière Grand</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .room-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 35px;
+        }
+
+        .room-card {
+            background: var(--surface, #151515);
+            border: 1px solid var(--border, #39352E);
+            padding: 25px;
+            border-radius: 8px;
+        }
+
+        .room-card h3 {
+            color: var(--champagne, #F7E7CE);
+            margin-bottom: 12px;
+        }
+
+        .room-card p {
+            color: var(--taupe, #B8B09F);
+            margin: 8px 0;
+        }
+
+        .room-price {
+            color: var(--gold, #CDAA70) !important;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .room-count {
+            font-size: 14px;
+        }
+
+        .message {
+            color: var(--taupe, #B8B09F);
+            text-align: center;
+            padding: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="brand">
+            <a href="index.html">LUMIÈRE GRAND</a>
+        </div>
+
+        <nav class="main-nav">
+            <a href="index.html">Home</a>
+            <a href="room.html" class="active">Rooms & Suites</a>
+            <a href="reservations.html">Reservations</a>
+            <a href="services.html">Services</a>
+            <a href="housekeeping.html">Housekeeping</a>
+            <a href="about.html">About Us</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <section class="page-hero">
+        <div>
+            <h1>Rooms & Suites</h1>
+            <p>Discover comfort, elegance, and exceptional hospitality.</p>
+        </div>
+    </section>
+
+    <main class="content-section">
+        <div class="section-heading">
+            <h2>Our Accommodations</h2>
+            <p>Explore the available room types at Lumière Grand.</p>
+        </div>
+
+        <div id="roomList" class="room-list">
+            <p class="message">Loading rooms...</p>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Lumière Grand. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        const ROOM_API = '/api/rooms';
+
+        async function loadRooms() {
+            const roomList = document.getElementById('roomList');
+
+            try {
+                const response = await fetch(ROOM_API);
+
+                if (!response.ok) {
+                    throw new Error('Failed to load rooms.');
+                }
+
+                const result = await response.json();
+
+                const rooms = Array.isArray(result)
+                    ? result
+                    : result.data || result.rooms || [];
+
+                if (rooms.length === 0) {
+                    roomList.innerHTML =
+                        '<p class="message">No rooms available.</p>';
+                    return;
+                }
+
+                const roomTypes = {};
+
+                rooms.forEach(room => {
+                    const typeId = room.room_type_id;
+
+                    if (!roomTypes[typeId]) {
+                        roomTypes[typeId] = {
+                            name: room.type_name || 'Room',
+                            capacity: room.capacity,
+                            price: room.price_per_night,
+                            description: room.description,
+                            rooms: []
+                        };
+                    }
+
+                    roomTypes[typeId].rooms.push(room);
+                });
+
+                roomList.innerHTML = '';
+
+                Object.values(roomTypes).forEach(type => {
+                    const card = document.createElement('div');
+                    card.className = 'room-card';
+
+                    const title = document.createElement('h3');
+                    title.textContent = type.name;
+
+                    const description = document.createElement('p');
+                    description.textContent =
+                        type.description || 'Comfortable accommodation for your stay.';
+
+                    const capacity = document.createElement('p');
+                    capacity.textContent =
+                        'Capacity: ' + (type.capacity ?? 'Not specified') + ' guests';
+
+                    const price = document.createElement('p');
+                    price.className = 'room-price';
+                    price.textContent =
+                        '₱' + Number(type.price || 0).toLocaleString('en-PH') +
+                        ' / night';
+
+                    const count = document.createElement('p');
+                    count.className = 'room-count';
+                    count.textContent =
+                        'Total rooms: ' + type.rooms.length;
+
+                    card.append(title, description, capacity, price, count);
+                    roomList.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error(error);
+
+                roomList.innerHTML =
+                    '<p class="message">Unable to load rooms. Please check the server.</p>';
+            }
+        }
+
+        loadRooms();
+    </script>
+
+</body>
+</html>
