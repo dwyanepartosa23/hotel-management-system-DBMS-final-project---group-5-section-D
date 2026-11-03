@@ -7,8 +7,13 @@ const db = require('./models/db');
 const app = express();
 
 app.use(express.json());
-
 app.use(express.static('public'));
+
+app.get('/', (req, res) => {
+    res.json({
+        message: 'Hotel Management API is running!'
+    });
+});
 
 app.get('/api/test-db', async (req, res) => {
     try {
@@ -33,17 +38,25 @@ app.get('/api/test-db', async (req, res) => {
 
 const guestRoutes = require('./routes/guestRoutes');
 const roomRoutes = require('./routes/roomRoutes');
+const housekeepingRoutes = require('./routes/housekeepingRoutes');
 const reservationRoutes = require('./routes/reservationRoutes');
 const employeeRoutes = require('./routes/employeeRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 const serviceOrderRoutes = require('./routes/serviceOrderRoutes');
+const invoiceRoutes = require('./routes/invoiceRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
+const reportRoutes = require('./routes/reportRoutes');
 
 app.use('/api/guests', guestRoutes);
 app.use('/api/rooms', roomRoutes);
+app.use('/api/housekeeping', housekeepingRoutes);
 app.use('/api/reservations', reservationRoutes);
 app.use('/api/employees', employeeRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/service-orders', serviceOrderRoutes);
+app.use('/api/invoices', invoiceRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/reports', reportRoutes);
 
 app.use('/api', (req, res) => {
     res.status(404).json({
