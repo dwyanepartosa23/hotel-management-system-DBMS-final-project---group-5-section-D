@@ -8,10 +8,8 @@ const app = express();
 
 app.use(express.json());
 
-// Serve frontend files
 app.use(express.static('public'));
 
-// Test MySQL connection
 app.get('/api/test-db', async (req, res) => {
     try {
         const [rows] = await db.query(
@@ -33,7 +31,6 @@ app.get('/api/test-db', async (req, res) => {
     }
 });
 
-// Import route files
 const guestRoutes = require('./routes/guestRoutes');
 const roomRoutes = require('./routes/roomRoutes');
 const reservationRoutes = require('./routes/reservationRoutes');
@@ -41,7 +38,6 @@ const employeeRoutes = require('./routes/employeeRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 const serviceOrderRoutes = require('./routes/serviceOrderRoutes');
 
-// Register API routes
 app.use('/api/guests', guestRoutes);
 app.use('/api/rooms', roomRoutes);
 app.use('/api/reservations', reservationRoutes);
@@ -49,7 +45,6 @@ app.use('/api/employees', employeeRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/service-orders', serviceOrderRoutes);
 
-// Handle unknown API endpoints
 app.use('/api', (req, res) => {
     res.status(404).json({
         success: false,
@@ -57,14 +52,24 @@ app.use('/api', (req, res) => {
     });
 });
 
-// Handle other unknown routes
 app.use((req, res) => {
     res.status(404).send('Page not found.');
 });
 
-// Start server
 const PORT = process.env.PORT || 1234;
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
+});
+
+server.on('error', (error) => {
+    console.error('Server error:', error);
+});
+
+server.on('close', () => {
+    console.log('Server closed.');
+});
+
+process.on('beforeExit', () => {
+    console.log('Node.js is about to exit.');
 });
