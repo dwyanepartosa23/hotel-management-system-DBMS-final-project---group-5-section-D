@@ -1,4 +1,4 @@
-// COntributo: Ricaplaza
+// Contributor: Ricaplaza
 const db = require('./db');
 
 async function getAllReservations() {
