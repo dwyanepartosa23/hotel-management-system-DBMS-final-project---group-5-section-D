@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoices | Lumi&egrave;re Grand</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .message { margin-top: 0.75rem; min-height: 1.2rem; }
+        .message.error { color: #c62828; }
+        .message.success { color: #2e7d32; }
+        .table-wrap { overflow-x: auto; margin-top: 1rem; }
+        .table-wrap table { width: 100%; border-collapse: collapse; }
+        .table-wrap th, .table-wrap td {
+            padding: 0.6rem 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(128, 128, 128, 0.35);
+            white-space: nowrap;
+        }
+        .row-actions button { margin-right: 0.4rem; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <a href="index.html" class="brand">
+            <span>LUMI&Egrave;RE GRAND</span>
+            <small>HOTEL &amp; HOSPITALITY</small>
+        </a>
+
+        <nav class="main-nav">
+            <a href="index.html">Home</a>
+            <a href="rooms.html">Rooms &amp; Suites</a>
+            <a href="reservations.html">Reservations</a>
+            <a href="services.html">Services</a>
+            <a href="invoices.html" class="active">Invoices</a>
+            <a href="about.html">About Us</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-hero">
+            <p class="eyebrow">BILLING</p>
+            <h1>Invoices</h1>
+            <p>Create and manage guest invoices, and review what has been paid.</p>
+        </section>
+
+        <section class="content-section">
+            <div class="form-container">
+                <h2 id="form-title">Add Invoice</h2>
+
+                <form id="invoice-form">
+                    <input type="hidden" id="invoice-id">
+
+                    <label for="reservation-id">Reservation ID</label>
+                    <input type="number" id="reservation-id" min="1" required>
+
+                    <label for="invoice-date">Invoice Date</label>
+                    <input type="date" id="invoice-date">
+
+                    <label for="room-charges">Room Charges</label>
+                    <input type="number" id="room-charges" min="0" step="0.01" required>
+
+                    <label for="service-charges">Service Charges</label>
+                    <input type="number" id="service-charges" min="0" step="0.01" value="0">
+
+                    <label for="invoice-status">Status</label>
+                    <select id="invoice-status" required>
+                        <option value="Unpaid">Unpaid</option>
+                        <option value="Partially Paid">Partially Paid</option>
+                        <option value="Paid">Paid</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+
+                    <button type="submit" class="btn" id="submit-button">Save Invoice</button>
+                    <button type="button" class="btn" id="cancel-button" hidden>Cancel Edit</button>
+                </form>
+
+                <p id="form-message" class="message"></p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>All Invoices</h2>
+            <p id="table-message" class="message"></p>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Reservation</th>
+                            <th>Guest</th>
+                            <th>Date</th>
+                            <th>Room Charges</th>
+                            <th>Service Charges</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invoice-table-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>Invoice and Payment Report</h2>
+            <p>Shows every invoice with how much has been paid and the remaining balance.</p>
+            <button type="button" class="btn" id="report-button">Load Report</button>
+            <p id="report-message" class="message"></p>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Invoice</th>
+                            <th>Reservation</th>
+                            <th>Date</th>
+                            <th>Total</th>
+                            <th>Total Paid</th>
+                            <th>Remaining Balance</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="report-table-body"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>LUMI&Egrave;RE GRAND</p>
+        <small>Shining standard of elegance.</small>
+    </footer>
+
+    <script src="invoices.js"></script>
+</body>
+</html>
