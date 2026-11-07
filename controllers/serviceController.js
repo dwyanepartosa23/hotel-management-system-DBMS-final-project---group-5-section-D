@@ -1,4 +1,3 @@
-
 const serviceModel = require('../models/serviceModel');
 
 async function getServices(req, res) {
@@ -193,7 +192,10 @@ module.exports = {
     updateService,
     deleteService
 };
+<<<<<<< HEAD
 
 //Contributor: rabadon
 
 ////Module: Services.
+=======
+>>>>>>> 156658e3bc5532ba02a0828fc8138da2dad7ac3d

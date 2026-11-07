@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +5,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Services | Lumière Grand</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .lookup-box {
+            max-width: 500px;
+            margin: 3rem auto;
+            padding: 2rem;
+            text-align: center;
+        }
+        .lookup-box input {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            margin: 1rem 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        .btn-primary {
+            padding: 0.9rem 2rem;
+            background: #CDAA70;
+            color: #080808;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-primary:hover {
+            background: #b89b5e;
+        }
+        .guest-info-bar {
+            background: #f9f6f0;
+            padding: 1rem 2rem;
+            margin: 1rem 5%;
+            border-radius: 6px;
+            display: none;
+        }
+        .services-wrapper {
+            display: none;
+            padding: 2rem 5%;
+        }
+        .service-card-clickable {
+            border: 2px solid transparent;
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+        .service-card-clickable:hover,
+        .service-card-clickable.selected {
+            border-color: #CDAA70;
+            background: #fefcf7;
+        }
+        .price-tag {
+            font-weight: 700;
+            color: #8B6A29;
+            font-size: 1.1rem;
+            margin: 0.5rem 0;
+        }
+        .order-section {
+            max-width: 600px;
+            margin: 3rem auto;
+            padding: 2rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            display: none;
+        }
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.7rem 0;
+            border-bottom: 1px dashed #ddd;
+        }
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            margin-top: 0.5rem;
+            font-weight: 700;
+            font-size: 1.15rem;
+            border-top: 2px solid #CDAA70;
+        }
+        .qty-control {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+        .qty-control input {
+            width: 50px;
+            text-align: center;
+            padding: 0.3rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .add-order-btn {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px solid #CDAA70;
+            color: #8B6A29;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .add-order-btn:hover {
+            background: #CDAA70;
+            color: white;
+        }
+        .message-box {
+            margin-top: 1rem;
+            padding: 0.8rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .success { background: #f0f9e6; color: #2e7d32; display: block; }
+        .error { background: #ffebee; color: #c62828; display: block; }
+    </style>
 </head>
 <body>
 
@@ -14,12 +125,13 @@
             <span>LUMIÈRE GRAND</span>
             <small>HOTEL & HOSPITALITY</small>
         </a>
-
-        <nav class="main-nav">
+        <nav class="site-nav">
             <a href="index.html">Home</a>
             <a href="rooms.html">Rooms & Suites</a>
             <a href="reservations.html">Reservations</a>
+            <a href="invoices.html">Invoices</a>
             <a href="services.html" class="active">Services</a>
+            <a href="employees.html">Employees</a>
             <a href="about.html">About Us</a>
             <a href="contact.html">Contact</a>
         </nav>
@@ -29,88 +141,42 @@
         <section class="page-hero">
             <p class="eyebrow">THOUGHTFUL HOSPITALITY</p>
             <h1>Our Services</h1>
-            <p>Enjoy thoughtful amenities and services designed to make every stay more comfortable.</p>
+            <p>Enter your booking email to view prices and place your order</p>
         </section>
 
-        <section class="content-section">
-            <h2>Hotel Services</h2>
+        <!-- Email Lookup -->
+        <div class="lookup-box" id="lookupArea">
+            <h3>Your Booking Email</h3>
+            <input type="email" id="guestEmail" placeholder="Enter your email address">
+            <button class="btn-primary" onclick="verifyGuest()">Continue to Order</button>
+            <div id="lookupMsg" class="message-box"></div>
+        </div>
 
-            <div class="service-list">
-                <article class="room-card">
-                    <h3>Room Service</h3>
-                    <p>Enjoy convenient in-room dining and assistance throughout your stay.</p>
-                </article>
+        <!-- Guest Info Bar -->
+        <div class="guest-info-bar" id="guestBar">
+            <p><strong>Welcome, </strong><span id="dispName"></span></p>
+            <p style="font-size:0.9rem; color:#666;">Active Reservation #<span id="dispResId"></span></p>
+        </div>
 
-                <article class="room-card">
-                    <h3>Housekeeping</h3>
-                    <p>Our housekeeping team helps maintain a clean, comfortable, and welcoming room.</p>
-                </article>
-
-                <article class="room-card">
-                    <h3>Concierge Assistance</h3>
-                    <p>Get assistance with guest inquiries, hotel information, and local recommendations.</p>
-                </article>
-
-                <article class="room-card">
-                    <h3>Event Assistance</h3>
-                    <p>Make special occasions more memorable with assistance in planning and arrangements.</p>
-                </article>
-            </div>
-        </section>
-
-        <section class="content-section">
-            <p class="eyebrow">A TASTE OF ELEGANCE</p>
-            <h2>Dining & Food Menu</h2>
-            <p>Discover a selection of thoughtfully prepared dishes for a satisfying dining experience.</p>
-
-            <div class="menu-category">
-                <h3>Breakfast</h3>
-                <article class="menu-item">
-                    <h4>Classic Breakfast Plate</h4>
-                    <p>Eggs, toasted bread, and a selection of breakfast sides.</p>
-                </article>
-                <article class="menu-item">
-                    <h4>Fresh Fruit Bowl</h4>
-                    <p>A refreshing selection of seasonal fruits.</p>
-                </article>
-                <article class="menu-item">
-                    <h4>Buttermilk Pancakes</h4>
-                    <p>Soft pancakes served with syrup and butter.</p>
-                </article>
+        <!-- Services & Order Area -->
+        <div class="services-wrapper" id="servicesArea">
+            <h2>Available Services</h2>
+            <div class="service-list" id="servicesList">
+                <!-- Dynamically loaded from DB -->
             </div>
 
-            <div class="menu-category">
-                <h3>Main Course</h3>
-                <article class="menu-item">
-                    <h4>Grilled Chicken</h4>
-                    <p>Seasoned grilled chicken served with rice and vegetables.</p>
-                </article>
-                <article class="menu-item">
-                    <h4>Beef Steak</h4>
-                    <p>Tender beef served with a savory sauce and selected sides.</p>
-                </article>
-                <article class="menu-item">
-                    <h4>Garden Pasta</h4>
-                    <p>Pasta tossed with fresh vegetables and a rich house sauce.</p>
-                </article>
+            <!-- Order Summary -->
+            <div class="order-section" id="orderBox">
+                <h3>Your Order</h3>
+                <div id="orderList"></div>
+                <div class="order-total">
+                    <span>Total Charges</span>
+                    <span id="grandTotal">₱ 0.00</span>
+                </div>
+                <button class="btn-primary" style="width:100%; margin-top:1.5rem;" onclick="submitOrder()">Place Order</button>
+                <div id="orderMsg" class="message-box"></div>
             </div>
-
-            <div class="menu-category">
-                <h3>Beverages</h3>
-                <article class="menu-item">
-                    <h4>Fresh Lemonade</h4>
-                    <p>A refreshing blend of lemon and chilled water.</p>
-                </article>
-                <article class="menu-item">
-                    <h4>Freshly Brewed Coffee</h4>
-                    <p>A warm cup of carefully brewed coffee.</p>
-                </article>
-                <article class="menu-item">
-                    <h4>Seasonal Fruit Juice</h4>
-                    <p>A refreshing drink made from selected fruits.</p>
-                </article>
-            </div>
-        </section>
+        </div>
     </main>
 
     <footer class="site-footer">
@@ -119,9 +185,132 @@
         <small>© 2026 Lumière Grand Hotel & Hospitality</small>
     </footer>
 
+    <script>
+        let guest = null;
+        let activeReservationId = null;
+        let servicesData = [];
+        let cart = [];
+
+        async function verifyGuest() {
+            const email = document.getElementById('guestEmail').value.trim();
+            const msg = document.getElementById('lookupMsg');
+            if (!email) {
+                msg.className = 'message-box error';
+                msg.textContent = 'Please enter your email address.';
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/guest/lookup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ identifier: email })
+                });
+                const data = await res.json();
+                if (!data.success) throw new Error(data.message);
+
+                guest = data.data.guest;
+                const active = data.data.reservations.find(r =>
+                    r.status !== 'Cancelled' && new Date(r.check_out_date) >= new Date()
+                ) || data.data.reservations[0];
+
+                if (!active) throw new Error('No active reservation found.');
+                activeReservationId = active.reservation_id;
+
+                document.getElementById('dispName').textContent = guest.first_name + ' ' + (guest.last_name || '');
+                document.getElementById('dispResId').textContent = activeReservationId;
+                document.getElementById('lookupArea').style.display = 'none';
+                document.getElementById('guestBar').style.display = 'block';
+                document.getElementById('servicesArea').style.display = 'block';
+
+                loadAllServices();
+            } catch (err) {
+                msg.className = 'message-box error';
+                msg.textContent = err.message;
+            }
+        }
+
+        async function loadAllServices() {
+            const res = await fetch('/api/services');
+            const result = await res.json();
+            servicesData = result.data || [];
+            renderServices();
+        }
+
+        function renderServices() {
+            const container = document.getElementById('servicesList');
+            container.innerHTML = servicesData.map(s => `
+                <article class="room-card service-card-clickable" id="svc-${s.service_id}">
+                    <h3>${s.service_name}</h3>
+                    <p>${s.description || ''}</p>
+                    <p class="price-tag">₱ ${Number(s.service_price).toFixed(2)}</p>
+                    <div class="qty-control">
+                        <label>Qty:</label>
+                        <input type="number" min="1" value="1" id="qty-${s.service_id}">
+                        <button class="add-order-btn" onclick="addToCart(${s.service_id}, ${s.service_price}, '${s.service_name.replace(/'/g, "\\'")}')">Add to Order</button>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        function addToCart(id, price, name) {
+            const qty = parseInt(document.getElementById(qty-${id}).value) || 1;
+            const existing = cart.find(i => i.service_id === id);
+            if (existing) {
+                existing.quantity += qty;
+            } else {
+                cart.push({ service_id: id, name: name, price: price, quantity: qty });
+            }
+            document.getElementById(svc-${id}).classList.add('selected');
+            updateOrderDisplay();
+        }
+
+        function updateOrderDisplay() {
+            const box = document.getElementById('orderBox');
+            const list = document.getElementById('orderList');
+            if (cart.length === 0) {
+                box.style.display = 'none';
+                return;
+            }
+            box.style.display = 'block';
+            list.innerHTML = cart.map(item => `
+                <div class="order-item">
+                    <span>${item.name} × ${item.quantity}</span>
+                    <span>₱ ${(item.price * item.quantity).toFixed(2)}</span>
+                </div>
+            `).join('');
+            const total = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+            document.getElementById('grandTotal').textContent = ₱ ${total.toFixed(2)};
+        }
+
+        async function submitOrder() {
+            if (!activeReservationId || cart.length === 0) return;
+            const msg = document.getElementById('orderMsg');
+            try {
+                const res = await fetch('/api/service-orders/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        reservation_id: activeReservationId,
+                        items: cart
+                    })
+                });
+                const data = await res.json();
+                if (!data.success) throw new Error(data.message);
+
+                msg.className = 'message-box success';
+                msg.textContent = '✅ Order placed! Added to your invoice.';
+                cart = [];
+                updateOrderDisplay();
+                document.querySelectorAll('.service-card-clickable').forEach(c => c.classList.remove('selected'));
+            } catch (err) {
+                msg.className = 'message-box error';
+                msg.textContent = err.message;
+            }
+        }
+    </script>
 </body>
 </html>
-```
 
 //Contributor: rabadon
 
