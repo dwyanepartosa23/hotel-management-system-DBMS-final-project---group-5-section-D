@@ -15,6 +15,14 @@ app.get('/', (req, res) => {
     });
 });
 
+app.get('/room-records', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'room-records.html'));
+});
+
+
+
+
+
 app.get('/api/test-db', async (req, res) => {
     try {
         const [rows] = await db.query(
@@ -46,6 +54,8 @@ const serviceOrderRoutes = require('./routes/serviceOrderRoutes');
 const invoiceRoutes = require('./routes/invoiceRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const reportRoutes = require('./routes/reportRoutes');
+const recordRoutes = require('./routes/recordRoutes');
+
 
 app.use('/api/guests', guestRoutes);
 app.use('/api/rooms', roomRoutes);
@@ -57,6 +67,8 @@ app.use('/api/service-orders', serviceOrderRoutes);
 app.use('/api/invoices', invoiceRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/reports', reportRoutes);
+app.use('/api/room-records', recordRoutes);
+
 
 app.use('/api', (req, res) => {
     res.status(404).json({
