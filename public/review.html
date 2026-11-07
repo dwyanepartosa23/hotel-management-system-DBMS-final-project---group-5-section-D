@@ -1,0 +1,480 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Discover guest experiences at Lumière Grand Hotel.">
+
+    <title>Guest Reviews | Lumière Grand</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* REVIEW PAGE */
+
+        .reviews-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 5rem 8%;
+        }
+
+        .reviews-intro {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+        }
+
+        .reviews-intro h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin: 1rem 0;
+        }
+
+        .reviews-intro h1 span {
+            color: var(--gold, #b89b5e);
+        }
+
+        .reviews-intro p {
+            line-height: 1.8;
+            color: var(--taupe, #777);
+        }
+
+        .reviews-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .review-form-section {
+            background: #fff;
+            padding: 2.5rem;
+            border: 1px solid #e8e2d8;
+        }
+
+        .review-form-section .eyebrow {
+            color: #b89b5e;
+            letter-spacing: 2px;
+            font-size: 0.75rem;
+        }
+
+        .review-form-section h2 {
+            margin: 0.8rem 0;
+        }
+
+        .review-form-section > p {
+            color: #777;
+            line-height: 1.7;
+        }
+
+        .review-form label {
+            display: block;
+            margin-top: 1.3rem;
+            font-size: 0.9rem;
+        }
+
+        .review-form input,
+        .review-form select,
+        .review-form textarea {
+            width: 100%;
+            padding: 0.9rem;
+            margin-top: 0.5rem;
+            border: 1px solid #ddd;
+            background: #faf9f6;
+            font: inherit;
+            box-sizing: border-box;
+        }
+
+        .review-form textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        .review-form input:focus,
+        .review-form select:focus,
+        .review-form textarea:focus {
+            outline: 1px solid #b89b5e;
+            border-color: #b89b5e;
+        }
+
+        .review-submit {
+            width: 100%;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #b89b5e;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font: inherit;
+            transition: background 0.3s;
+        }
+
+        .review-submit:hover {
+            background: #967a43;
+        }
+
+        .reviews-list-section h2 {
+            margin-top: 0;
+        }
+
+        .review-card {
+            background: #fff;
+            border: 1px solid #e8e2d8;
+            padding: 1.8rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .review-stars {
+            color: #b89b5e;
+            font-size: 1.4rem;
+            letter-spacing: 3px;
+            margin-bottom: 0.8rem;
+        }
+
+        .review-anonymous {
+            display: block;
+            font-size: 0.85rem;
+            color: #777;
+            margin-bottom: 0.8rem;
+        }
+
+        .review-comment {
+            line-height: 1.8;
+            color: #444;
+            overflow-wrap: anywhere;
+        }
+
+        .review-date {
+            display: block;
+            margin-top: 1rem;
+            color: #999;
+            font-size: 0.8rem;
+        }
+
+        .review-message {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .review-message.success {
+            color: #387346;
+        }
+
+        .review-message.error {
+            color: #b52b2b;
+        }
+
+        .empty-reviews {
+            padding: 2rem;
+            text-align: center;
+            color: #777;
+            background: #faf9f6;
+        }
+
+        @media (max-width: 850px) {
+            .reviews-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .reviews-page {
+                padding: 3rem 5%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+    <header class="site-header">
+
+        <a href="index.html" class="brand">
+            <h2>Lumière Grand</h2>
+            <span>HOTEL & HOSPITALITY</span>
+        </a>
+
+        <nav class="site-nav">
+            <a href="index.html">Home</a>
+            <a href="rooms.html">Rooms & Suites</a>
+            <a href="reservations.html">Reservations</a>
+            <a href="services.html">Services</a>
+            <a href="employees.html">Employees</a>
+            <a href="about.html">About Us</a>
+            <a href="contact.html">Contact</a>
+            <a href="review.html" class="active">Reviews</a>
+        </nav>
+
+    </header>
+
+    <!-- MAIN REVIEW PAGE -->
+    <main class="reviews-page">
+
+        <section class="reviews-intro">
+
+            <p class="eyebrow">THE LUMIÈRE EXPERIENCE</p>
+
+            <h1>
+                Guest <span>Reviews</span>
+            </h1>
+
+            <p>
+                Every guest experience matters to us.
+                Discover the stories and experiences shared
+                by those who have stayed at Lumière Grand.
+            </p>
+
+        </section>
+
+        <div class="reviews-layout">
+
+            <!-- REVIEW FORM -->
+            <section class="review-form-section">
+
+                <p class="eyebrow">SHARE YOUR EXPERIENCE</p>
+
+                <h2>Leave a Review</h2>
+
+                <p>
+                    We appreciate your feedback.
+                    Your review will be displayed anonymously.
+                </p>
+
+                <form id="review-form" class="review-form">
+
+                    <label for="guest-id">Guest ID</label>
+
+                    <input
+                        type="number"
+                        id="guest-id"
+                        min="1"
+                        required
+                        placeholder="Enter your guest ID"
+                    >
+
+                    <label for="reservation-id">Reservation ID</label>
+
+                    <input
+                        type="number"
+                        id="reservation-id"
+                        min="1"
+                        required
+                        placeholder="Enter your reservation ID"
+                    >
+
+                    <label for="rating">Your Rating</label>
+
+                    <select id="rating" required>
+                        <option value="">Select your rating</option>
+                        <option value="5">★★★★★ - Excellent</option>
+                        <option value="4">★★★★ - Very Good</option>
+                        <option value="3">★★★ - Good</option>
+                        <option value="2">★★ - Fair</option>
+                        <option value="1">★ - Poor</option>
+                    </select>
+
+                    <label for="review-comment">Your Comment</label>
+
+                    <textarea
+                        id="review-comment"
+                        maxlength="500"
+                        required
+                        placeholder="Tell us about your stay..."
+                    ></textarea>
+
+                    <button type="submit" class="review-submit">
+                        Submit Anonymous Review
+                    </button>
+
+                    <p id="form-message" class="review-message"></p>
+
+                </form>
+
+            </section>
+
+            <!-- REVIEWS DISPLAY -->
+            <section class="reviews-list-section">
+
+                <p class="eyebrow">GUEST EXPERIENCES</p>
+
+                <h2>What Our Guests Say</h2>
+
+                <p id="reviews-message">Loading reviews...</p>
+
+                <div id="reviews-list"></div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+
+        <h2>Lumière Grand</h2>
+
+        <p>Shining standard of elegance.</p>
+
+        <p>
+            &copy; 2026 Lumière Grand.
+            All Rights Reserved.
+        </p>
+
+    </footer>
+
+    <!-- REVIEW JAVASCRIPT -->
+    <script>
+
+        const API_BASE = '/api/reviews';
+
+        const reviewForm = document.getElementById('review-form');
+        const guestInput = document.getElementById('guest-id');
+        const reservationInput = document.getElementById('reservation-id');
+        const ratingInput = document.getElementById('rating');
+        const commentInput = document.getElementById('review-comment');
+
+        const formMessage = document.getElementById('form-message');
+        const reviewsMessage = document.getElementById('reviews-message');
+        const reviewsList = document.getElementById('reviews-list');
+
+        document.addEventListener('DOMContentLoaded', loadReviews);
+
+        // SUBMIT REVIEW
+        reviewForm.addEventListener('submit', async (event) => {
+
+            event.preventDefault();
+
+            const review = {
+                guest_id: Number(guestInput.value),
+                reservation_id: Number(reservationInput.value),
+                rating: Number(ratingInput.value),
+                review_comment: commentInput.value.trim()
+            };
+
+            try {
+
+                const response = await fetch(API_BASE, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(review)
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        result.message || 'Failed to submit review.'
+                    );
+                }
+
+                showMessage(
+                    formMessage,
+                    result.message,
+                    'success'
+                );
+
+                reviewForm.reset();
+
+                await loadReviews();
+
+            } catch (error) {
+
+                showMessage(
+                    formMessage,
+                    error.message,
+                    'error'
+                );
+
+            }
+
+        });
+
+        // LOAD REVIEWS
+        async function loadReviews() {
+
+            try {
+
+                reviewsMessage.textContent = 'Loading reviews...';
+                reviewsList.replaceChildren();
+
+                const response = await fetch(API_BASE);
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        result.message || 'Failed to load reviews.'
+                    );
+                }
+
+                const reviews = result.data;
+
+                if (!reviews || reviews.length === 0) {
+
+                    reviewsMessage.textContent =
+                        'No reviews yet. Be the first to share your experience!';
+
+                    return;
+                }
+
+                reviewsMessage.textContent = '';
+
+                reviews.forEach(review => {
+
+                    const card = document.createElement('article');
+                    card.className = 'review-card';
+
+                    const stars = document.createElement('div');
+                    stars.className = 'review-stars';
+
+                    stars.textContent =
+                        '★'.repeat(Number(review.rating)) +
+                        '☆'.repeat(5 - Number(review.rating));
+
+                    const anonymous = document.createElement('strong');
+                    anonymous.className = 'review-anonymous';
+                    anonymous.textContent = 'Anonymous Guest';
+
+                    const comment = document.createElement('p');
+                    comment.className = 'review-comment';
+
+                    comment.textContent =
+                        review.review_comment || 'No comment provided.';
+
+                    const date = document.createElement('small');
+                    date.className = 'review-date';
+
+                    date.textContent = review.review_date
+                        ? new Date(review.review_date).toLocaleDateString()
+                        : '';
+
+                    card.append(stars, anonymous, comment, date);
+
+                    reviewsList.appendChild(card);
+
+                });
+
+            } catch (error) {
+
+                reviewsMessage.textContent = error.message;
+
+            }
+
+        }
+
+        // DISPLAY MESSAGE
+        function showMessage(element, message, type) {
+
+            element.textContent = message;
+            element.className = `review-message ${type}`;
+
+        }
+
+    </script>
+
+</body>
+
+</html>
