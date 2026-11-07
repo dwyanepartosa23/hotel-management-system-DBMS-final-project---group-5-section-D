@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Records — Lumière Grand</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .records-page {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 5%;
+        }
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .room-card {
+            border: 2px solid;
+            border-radius: 8px;
+            padding: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .room-card:hover {
+            transform: translateY(-3px);
+        }
+        .status-Available { border-color: #10b981; background: #f0fdf4; }
+        .status-Occupied { border-color: #3b82f6; background: #eff6ff; }
+        .room-number {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+        .room-status {
+            display: inline-block;
+            padding: 0.25rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .stat-Available { background: #d1fae5; color: #065f46; }
+        .stat-Occupied { background: #dbeafe; color: #1e40af; }
+        .guest-name {
+            font-size: 0.9rem;
+            color: #555;
+        }
+        .detail-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 450px;
+            height: 100vh;
+            background: #fff;
+            border-left: 1px solid #ddd;
+            padding: 2rem;
+            overflow-y: auto;
+            transform: translateX(100%);
+            transition: transform 0.3s;
+            z-index: 100;
+        }
+        .detail-panel.open {
+            transform: translateX(0);
+        }
+        .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .order-card {
+            border: 1px solid #e8e2d8;
+            border-left: 4px solid;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 0.8rem 0;
+        }
+        .order-Pending { border-left-color: #f59e0b; }
+        .order-Served { border-left-color: #10b981; }
+        .order-Declined { border-left-color: #ef4444; background: #fef2f2; }
+        .reason-input {
+            width: 100%;
+            padding: 0.7rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .button-decline {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 0.3rem;
+        }
+        .button-serve {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            margin-top: 0.3rem;
+        }
+        .decline-note {
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: #fee2e2;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #991b1b;
+        }
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 99;
+            display: none;
+        }
+        .overlay.open {
+            display: block;
+        }
+        .message-area {
+            margin: 1rem 0;
+            padding: 0.7rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .msg-success { background: #d1fae5; color: #065f46; display: block; }
+        .msg-error { background: #fee2e2; color: #991b1b; display: block; }
+        .hidden-form {
+            display: none;
+            margin-top: 0.5rem;
+        }
+        .hidden-form.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <a href="index.html" class="brand">
+            <h2>Lumière Grand</h2>
+            <span>HOTEL & HOSPITALITY</span>
+        </a>
+        <nav class="site-nav">
+            <a href="index.html">Home</a>
+            <a href="room-records.html" class="active">Room Records</a>
+            <a href="invoices.html">Invoices</a>
+        </nav>
+    </header>
+
+    <main class="records-page">
+        <h1>Room Status Records</h1>
+        <p>Click any room to view guest details and process service orders</p>
+        <div id="messageArea" class="message-area"></div>
+        <div id="roomsGrid"><p>Loading records...</p></div>
+    </main>
+
+    <div class="overlay" id="overlay" onclick="closePanel()"></div>
+    <div class="detail-panel" id="detailPanel">
+        <button class="close-button" onclick="closePanel()">&times;</button>
+        <h2 id="panelTitle">Room Details</h2>
+        <div id="panelContent"></div>
+    </div>
+
+    <script>
+        const API_BASE = '/api/room-records';
+
+        document.addEventListener('DOMContentLoaded', loadRooms);
+
+        function showMessage(type, text) {
+            const area = document.getElementById('messageArea');
+            area.className = 'message-area msg-' + type;
+            area.textContent = text;
+            setTimeout(() => {
+                area.className = 'message-area';
+            }, 4000);
+        }
+
+        async function loadRooms() {
+            const grid = document.getElementById('roomsGrid');
+            grid.innerHTML = '<p>Loading records...</p>';
+            try {
+                const res = await fetch(API_BASE);
+                const result = await res.json();
+                if (!result.success) throw new Error(result.message);
+                
+                grid.innerHTML = '';
+                result.data.forEach(room => {
+                    const isOccupied = room.reservation_id ? 'Occupied' : 'Available';
+                    const card = document.createElement('div');
+                    card.className = 'room-card status-' + isOccupied;
+                    card.innerHTML = `
+                        <div class="room-number">${room.room_number}</div>
+                        <span class="room-status stat-${isOccupied}">${isOccupied}</span>
+                        <div class="guest-name">
+                            ${isOccupied === 'Occupied' 
+                                ? room.first_name 
+                                : '— Vacant —'}
+                        </div>
+                    `;
+                    card.onclick = () => openRoom(room, isOccupied);
+                    grid.appendChild(card);
+                });
+            } catch (err) {
+                grid.innerHTML = '<p style="color:red;">' + err.message + '</p>';
+            }
+        }
+
+        async function openRoom(room, status) {
+            const panel = document.getElementById('detailPanel');
+            const overlay = document.getElementById('overlay');
+            const title = document.getElementById('panelTitle');
+            const content = document.getElementById('panelContent');
+
+            title.textContent = 'Room ' + room.room_number;
+            panel.classList.add('open');
+            overlay.classList.add('open');
+
+            if (status === 'Available') {
+                content.innerHTML = '<p style="color:#666;">This room is vacant and available.</p>';
+                return;
+            }
+
+            content.innerHTML = `
+                <div style="margin-bottom:1.5rem; padding-bottom:1rem; border-bottom:1px solid #ddd;">
+                    <strong>Guest:</strong> ${room.first_name}<br>
+                    <strong>Check-in:</strong> ${room.check_in_date}<br>
+                    <strong>Check-out:</strong> ${room.check_out_date}
+                </div>
+                <h3>Service Orders</h3>
+                <p>Loading orders...</p>
+            `;
+
+            try {
+                const res = await fetch(API_BASE + '/' + room.room_id + '/orders');
+                const result = await res.json();
+                if (!result.success) throw new Error(result.message);
+
+                const orders = result.data;
+                let ordersHtml = `
+                    <div style="margin-bottom:1.5rem; padding-bottom:1rem; border-bottom:1px solid #ddd;">
+                        <strong>Guest:</strong> ${room.first_name}<br>
+                        <strong>Check-in:</strong> ${room.check_in_date}<br>
+                        <strong>Check-out:</strong> ${room.check_out_date}
+                    </div>
+                    <h3>Service Orders</h3>
+                `;
+
+                if (orders.length === 0) {
+                    ordersHtml += '<p style="color:#666;">No service orders yet.</p>';
+                } else {
+                    ordersHtml += orders.map(order => {
+                        let html = `
+                            <div class="order-card order-${order.order_status}">
+                                <div>
+                                    <strong>${order.service_name}</strong><br>
+                                    Qty: ${order.quantity} · ₱ ${Number(order.subtotal).toFixed(2)}<br>
+                                    <small>Status: ${order.order_status} · ${order.order_date}</small>
+                                </div>
+                                ${order.order_status === 'Pending' ? `
+                                    <div style="margin-top:0.8rem;">
+                                        <button class="button-serve" onclick="markServed(${order.service_order_id})">Mark Served</button>
+                                        <button class="button-decline" onclick="toggleDeclineForm(${order.service_order_id})">Decline</button>
+                                        <div id="decline-form-${order.service_order_id}" class="hidden-form">
+                                            <input type="text" id="reason-${order.service_order_id}"
+                                                class="reason-input" placeholder="Enter reason...">
+                                            <button class="button-decline" onclick="submitDecline(${order.service_order_id})">Submit Decline</button>
+                                        </div>
+                                    </div>
+                                ` : ''}
+                                ${order.order_status === 'Declined' && order.decline_comment ? `
+                                    <div class="decline-note">
+                                        Declined — Reason: ${order.decline_comment}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                        return html;
+                    }).join('');
+                }
+                content.innerHTML = ordersHtml;
+            } catch (err) {
+                content.innerHTML = '<p style="color:red;">' + err.message + '</p>';
+            }
+        }
+
+        function toggleDeclineForm(orderId) {
+            const form = document.getElementById('decline-form-' + orderId);
+            form.classList.toggle('show');
+        }
+
+        async function markServed(orderId) {
+            try {
+                const res = await fetch(API_BASE + '/order/' + orderId + '/served', {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const result = await res.json();
+                if (!result.success) throw new Error(result.message);
+                showMessage('success', 'Order marked as served');
+                closePanel();
+            } catch (err) {
+                showMessage('error', err.message);
+            }
+        }
+
+        async function submitDecline(orderId) {
+            const reasonInput = document.getElementById('reason-' + orderId);
+            const reason = reasonInput.value.trim();
+            if (!reason) {
+                showMessage('error', 'Please enter a reason');
+                return;
+            }
+            try {
+                const res = await fetch(API_BASE + '/order/' + orderId + '/decline', {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ reason: reason })
+                });
+                const result = await res.json();
+                if (!result.success) throw new Error(result.message);
+                showMessage('success', 'Order declined. Guest notified.');
+                closePanel();
+            } catch (err) {
+                showMessage('error', err.message);
+            }
+        }
+
+        function closePanel() {
+            document.getElementById('detailPanel').classList.remove('open');
+            document.getElementById('overlay').classList.remove('open');
+            loadRooms();
+        }
+    </script>
+</body>
+</html>
