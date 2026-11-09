@@ -87,7 +87,6 @@ async function createBooking(booking) {
     try {
         await connection.beginTransaction();
 
-        // 1. Find room type
         const [typeRows] = await connection.query(
             `SELECT room_type_id, type_name, capacity, price_per_night
              FROM room_types
@@ -101,13 +100,11 @@ async function createBooking(booking) {
         }
         const roomType = typeRows[0];
 
-        // 2. Capacity check
         if (guests > roomType.capacity) {
             await connection.rollback();
             return { status: 'over_capacity', capacity: roomType.capacity };
         }
 
-        // 3. Find available room â€” checks BOTH status AND no overlap
         const room = await roomModel.findAvailableRoom(
             roomType.room_type_id,
             check_in,
@@ -117,12 +114,11 @@ async function createBooking(booking) {
         );
         if (!room) {
             await connection.rollback();
-            console.log(âŒ No available room for type: ${room_type});
+            console.log('No available room for type:', room_type);
             return { status: 'no_room' };
         }
-        console.log(âœ… Found available room: #${room.room_number});
+        console.log('Found available room: #' + room.room_number);
 
-        // 4. Find or create guest
         const [guestRows] = await connection.query(
             'SELECT guest_id FROM guests WHERE email = ? LIMIT 1',
             [email]
@@ -138,7 +134,6 @@ async function createBooking(booking) {
             guestId = guestResult.insertId;
         }
 
-        // 5. Create reservation
         const [resResult] = await connection.query(
             `INSERT INTO reservations
              (guest_id, employee_id, reservation_date, check_in_date,
@@ -148,7 +143,6 @@ async function createBooking(booking) {
         );
         const reservationId = resResult.insertId;
 
-        // 6. Link room to reservation
         await connection.query(
             `INSERT INTO reservation_rooms
              (reservation_id, room_id, nightly_rate)
@@ -156,17 +150,16 @@ async function createBooking(booking) {
             [reservationId, room.room_id, room.price_per_night]
         );
 
-        // 7. Mark room as Booked â€” EXPLICIT update
         const [updateResult] = await connection.query(
             `UPDATE rooms
              SET room_status = 'Booked'
              WHERE room_id = ?`,
             [room.room_id]
         );
-        console.log(âœ… Room ${room.room_id} status updated: ${updateResult.affectedRows} row(s) changed);
+        console.log('Room ' + room.room_id + ' status updated: ' + updateResult.affectedRows + ' row(s) changed');
 
         await connection.commit();
-        console.log(âœ… Booking successful â€” Reservation ID: ${reservationId});
+        console.log('Booking successful — Reservation ID: ' + reservationId);
 
         return {
             status: 'ok',
@@ -185,9 +178,6 @@ async function createBooking(booking) {
     }
 }
 
-// ==========================================
-// NEW: Guest Lookup â€” finds by Email or ID
-// ==========================================
 const { getServicesForReservation, getServiceTotal } = require('./serviceModel');
 const { getPaymentsForInvoice } = require('./invoiceModel');
 
@@ -235,18 +225,17 @@ async function getGuestFullDetails(guest_identifier) {
         const services = await getServicesForReservation(res.reservation_id);
         const service_total = await getServiceTotal(res.reservation_id);
 
-        // Use YOUR invoice column: reservations_id (not reservation_id)
         const [invoices] = await db.query(`
-    SELECT * FROM invoices WHERE reservations_id = ? LIMIT 1
-`, [res.reservation_id]);
-const invoice = invoices[0] || null;
+            SELECT * FROM invoices WHERE reservations_id = ? LIMIT 1
+        `, [res.reservation_id]);
+        const invoice = invoices[0] || null;
 
-let payments = [], balance_due = 0, total_paid = 0;
-if (invoice) {
-    payments = await getPaymentsForInvoice(invoice.invoices_id);
-    total_paid = payments.reduce((sum, p) => sum + Number(p.amount || 0), 0);
-    balance_due = Number(invoice.total_amount) - total_paid;
-}
+        let payments = [], balance_due = 0, total_paid = 0;
+        if (invoice) {
+            payments = await getPaymentsForInvoice(invoice.invoices_id);
+            total_paid = payments.reduce((sum, p) => sum + Number(p.amount || 0), 0);
+            balance_due = Number(invoice.total_amount) - total_paid;
+        }
 
         const nights = Math.ceil(
             (new Date(res.check_out_date) - new Date(res.check_in_date)) / (1000 * 60 * 60 * 24)

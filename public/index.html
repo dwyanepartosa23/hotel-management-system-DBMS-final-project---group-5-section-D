@@ -10,6 +10,55 @@
     <title>Lumière Grand | Shining Standard of Elegance</title>
 
     <link rel="stylesheet" href="style.css">
+    <style>
+        .site-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .site-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .management-dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #000000;
+            min-width: 220px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border-radius: 6px;
+            padding: 0.5rem 0;
+            z-index: 1000;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .dropdown-menu a:hover {
+            background: #333333;
+        }
+
+        .management-dropdown:hover .dropdown-menu {
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
@@ -23,15 +72,25 @@
         </a>
 
         <nav class="site-nav">
+            <!-- Management dropdown on the LEFT -->
+            <div class="management-dropdown">
+                <a href="#" class="dropdown-toggle">Management</a>
+                <div class="dropdown-menu">
+                    <a href="room-records.html">Room Status Records</a>
+                    <a href="review.html">Manage Reviews</a>
+                    <a href="employees.html">Employee Records</a>
+                </div>
+            </div>
+
             <a href="index.html" class="active">Home</a>
             <a href="rooms.html">Rooms & Suites</a>
             <a href="reservations.html">Reservations</a>
             <a href="services.html">Services</a>
-            <a href="review.html">Reviews</a>
-            <a href="employees.html">Employees</a>
-            <a href="room-records.html">Management</a>
+            <a href="invoices.html">My Invoice</a>
             <a href="about.html">About Us</a>
             <a href="contact.html">Contact</a>
+            <a href="housekeeping.html">Housekeeping</a>
+            <a href="review.html">Reviews</a>
         </nav>
 
     </header>

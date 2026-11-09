@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// PAGE ROUTES — COMBINED
+// PAGE ROUTES
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
@@ -126,6 +126,115 @@ app.post('/api/service-orders/add', async (req, res) => {
     }
 });
 
+// Get all rooms with status
+app.get('/api/room-records', async (req, res) => {
+    try {
+        const [rows] = await db.query(`
+            SELECT
+                r.room_id,
+                r.room_number,
+                CASE 
+                    WHEN res.reservation_id IS NOT NULL 
+                         AND res.check_out_date >= CURDATE() 
+                         AND res.reservation_status = 'Confirmed'
+                    THEN 'Occupied'
+                    ELSE 'Available'
+                END AS occupancy,
+                res.reservation_id,
+                res.check_in_date,
+                res.check_out_date,
+                g.first_name
+            FROM rooms r
+            LEFT JOIN reservation_rooms rr 
+                ON r.room_id = rr.room_id
+            LEFT JOIN reservations res 
+                ON rr.reservation_id = res.reservation_id
+                AND res.reservation_status = 'Confirmed'
+                AND res.check_out_date >= CURDATE()
+            LEFT JOIN guests g 
+                ON res.guest_id = g.guest_id
+            ORDER BY r.room_number
+        `);
+        res.json({ success: true, data: rows });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: 'Failed to load room records.' });
+    }
+});
+;
+
+
+// Get service orders for a specific room's active reservation
+app.get('/api/room-records/:room_id/orders', async (req, res) => {
+    try {
+        const { room_id } = req.params;
+        const [rows] = await db.query(`
+            SELECT
+                so.service_order_id,
+                so.reservation_id,
+                so.service_id,
+                s.service_name,
+                s.service_price AS price,
+                so.quantity,
+                (so.quantity * s.service_price) AS subtotal,
+                so.order_status,
+                so.decline_reason,
+                so.created_at AS order_date
+            FROM service_orders so
+            JOIN services s ON so.service_id = s.service_id
+            JOIN reservation_rooms rr ON so.reservation_id = rr.reservation_id
+            JOIN reservations res ON rr.reservation_id = res.reservation_id
+            WHERE rr.room_id = ?
+              AND res.check_out_date >= CURDATE()
+            ORDER BY so.created_at DESC
+        `, [room_id]);
+        res.json({ success: true, data: rows });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: 'Failed to load orders.' });
+    }
+});
+
+
+// Mark order as served
+app.patch('/api/room-records/order/:order_id/served', async (req, res) => {
+    try {
+        const { order_id } = req.params;
+        const [result] = await db.query(`
+            UPDATE service_orders
+            SET order_status = 'Served'
+            WHERE service_order_id = ?
+        `, [order_id]);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ success: false, message: 'Order not found.' });
+        }
+        res.json({ success: true });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: 'Failed to update order.' });
+    }
+});
+
+// Decline order with reason
+app.patch('/api/room-records/order/:order_id/decline', async (req, res) => {
+    try {
+        const { order_id } = req.params;
+        const { reason } = req.body;
+        const [result] = await db.query(`
+            UPDATE service_orders
+            SET order_status = 'Declined', decline_reason = ?
+            WHERE service_order_id = ?
+        `, [reason || null, order_id]);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ success: false, message: 'Order not found.' });
+        }
+        res.json({ success: true });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: 'Failed to decline order.' });
+    }
+});
+
 // OTHER API ROUTES
 const guestRoutes = require('./routes/guestRoutes');
 const roomRoutes = require('./routes/roomRoutes');
@@ -151,7 +260,7 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/room-records', recordRoutes);
 
-// 404 Handlers — MUST BE LAST
+// 404 Handlers
 app.use('/api', (req, res) => {
     res.status(404).json({
         success: false,
