@@ -6,7 +6,7 @@ const db = require('./models/db');
 const { addServiceOrder } = require('./models/serviceModel');
 
 const app = express();
-
+@@ -86,3 +87,8 @@ server.on('close', () => {
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -157,6 +157,8 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/room-records', recordRoutes);
 
+
+=======
 // ==========================================
 // 404 Handlers — MUST BE LAST
 // ==========================================
@@ -185,5 +187,18 @@ server.on('error', (error) => {
     console.error('Server error:', error);
 });
 
+server.on('close', () => {
+    console.log('Server closed.');
+});
+
+process.on('beforeExit', () => {
+    console.log('Node.js is about to exit.');
+});
+
+
+app.get('/reviews', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'reviews.html'));
+});
+=======
 //Contributor: rabadon
 ////Module: Services
