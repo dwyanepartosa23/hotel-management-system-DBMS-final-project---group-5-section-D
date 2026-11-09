@@ -10,10 +10,14 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ==========================================
-// PAGE ROUTES
+// PAGE ROUTES — COMBINED
 // ==========================================
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/room-records', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'room-records.html'));
 });
 
 app.get('/rooms', (req, res) => {
@@ -69,7 +73,7 @@ app.get('/api/test-db', async (req, res) => {
 });
 
 // ==========================================
-// GUEST LOOKUP API â€” Find by Email or ID
+// GUEST LOOKUP API
 // ==========================================
 const lookupRouter = express.Router();
 lookupRouter.post('/lookup', async (req, res) => {
@@ -113,6 +117,7 @@ const serviceOrderRoutes = require('./routes/serviceOrderRoutes');
 const invoiceRoutes = require('./routes/invoiceRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const reportRoutes = require('./routes/reportRoutes');
+const recordRoutes = require('./routes/recordRoutes');
 
 app.use('/api/guests', guestRoutes);
 app.use('/api/rooms', roomRoutes);
@@ -124,6 +129,7 @@ app.use('/api/service-orders', serviceOrderRoutes);
 app.use('/api/invoices', invoiceRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/reports', reportRoutes);
+app.use('/api/room-records', recordRoutes);
 
 // 404 Handlers
 app.use('/api', (req, res) => {
@@ -143,8 +149,8 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 1234;
 
 const server = app.listen(PORT, () => {
-    console.log(âœ… Server running at http://localhost:${PORT});
-    console.log(âœ… Guest Invoice Page: http://localhost:${PORT}/guest-invoice);
+    console.log(`Server running at http://localhost:${PORT}`);
+    console.log(`Guest Invoice Page: http://localhost:${PORT}/guest-invoice`);
 });
 
 server.on('error', (error) => {
