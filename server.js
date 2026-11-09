@@ -3,6 +3,7 @@ require('dotenv').config();
 const path = require('path');
 
 const db = require('./models/db');
+const { addServiceOrder } = require('./models/serviceModel');
 
 const app = express();
 
@@ -102,6 +103,29 @@ lookupRouter.post('/lookup', async (req, res) => {
 });
 app.use('/api/guest', lookupRouter);
 
+// SERVICE ORDER — Add to Invoice
+app.post('/api/service-orders/add', async (req, res) => {
+    try {
+        const { reservation_id, items } = req.body;
+        if (!reservation_id || !items || !items.length) {
+            return res.status(400).json({
+                success: false,
+                message: 'Missing order details'
+            });
+        }
+        for (const item of items) {
+            await addServiceOrder(reservation_id, item.service_id, item.quantity);
+        }
+        res.json({ success: true, message: 'Services added to your invoice' });
+    } catch (err) {
+        console.error('Order error:', err);
+        res.status(500).json({
+            success: false,
+            message: err.message || 'Failed to place order'
+        });
+    }
+});
+
 // OTHER API ROUTES
 const guestRoutes = require('./routes/guestRoutes');
 const roomRoutes = require('./routes/roomRoutes');
@@ -127,7 +151,7 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/room-records', recordRoutes);
 
-// 404 Handlers
+// 404 Handlers — MUST BE LAST
 app.use('/api', (req, res) => {
     res.status(404).json({
         success: false,
@@ -158,3 +182,6 @@ server.on('close', () => {
 process.on('beforeExit', () => {
     console.log('Node.js is about to exit.');
 });
+
+//Contributor: rabadon
+////Module: Services
