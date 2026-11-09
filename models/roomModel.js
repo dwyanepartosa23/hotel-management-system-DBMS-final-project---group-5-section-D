@@ -1,4 +1,3 @@
-
 const db = require('./db');
 
 async function getAllRooms() {
@@ -14,7 +13,7 @@ async function getAllRooms() {
             rt.description,
             rt.capacity,
             rt.price_per_night
-        FROM room r
+        FROM rooms r
         INNER JOIN room_types rt
             ON r.room_type_id = rt.room_type_id
         ORDER BY r.room_id
@@ -36,7 +35,7 @@ async function getRoomById(room_id) {
             rt.description,
             rt.capacity,
             rt.price_per_night
-        FROM room r
+        FROM rooms r
         INNER JOIN room_types rt
             ON r.room_type_id = rt.room_type_id
         WHERE r.room_id = ?
@@ -47,7 +46,7 @@ async function getRoomById(room_id) {
 
 async function createRoom(room_number, floor_number, room_status, notes, room_type_id) {
     const [result] = await db.query(
-        `INSERT INTO room
+        `INSERT INTO rooms
         (room_number, floor_number, room_status, notes, room_type_id)
         VALUES (?, ?, ?, ?, ?)`,
         [room_number, floor_number, room_status, notes || null, room_type_id]
@@ -58,7 +57,7 @@ async function createRoom(room_number, floor_number, room_status, notes, room_ty
 
 async function updateRoom(room_id, room_number, floor_number, room_status, notes, room_type_id) {
     const [result] = await db.query(
-        `UPDATE room
+        `UPDATE rooms
         SET room_number = ?, floor_number = ?, room_status = ?, notes = ?, room_type_id = ?
         WHERE room_id = ?`,
         [room_number, floor_number, room_status, notes || null, room_type_id, room_id]
@@ -69,7 +68,7 @@ async function updateRoom(room_id, room_number, floor_number, room_status, notes
 
 async function deleteRoom(room_id) {
     const [result] = await db.query(
-        'DELETE FROM room WHERE room_id = ?',
+        'DELETE FROM rooms WHERE room_id = ?',
         [room_id]
     );
 

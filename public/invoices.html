@@ -395,9 +395,10 @@
             <a href="reservations.html">Reservations</a>
             <a href="services.html">Services</a>
             <a href="invoices.html" class="active">Invoices</a>
-            <a href="employees.html">Employees</a>
             <a href="about.html">About Us</a>
             <a href="contact.html">Contact</a>
+            <a href="housekeeping.html">Housekeeping</a>
+            <a href="review.html">Reviews</a>
         </nav>
     </header>
 
@@ -479,7 +480,7 @@
                 guestHeader.innerHTML = `
                     <h2>${guest.first_name} ${guest.last_name || ''}</h2>
                     <p>${guest.email}</p>
-                    ${guest.phone ? <p>${guest.phone}</p> : ''}
+                    ${guest.phone ? `<p>${guest.phone}</p>` : ''}
                 `;
 
                 // Reservations

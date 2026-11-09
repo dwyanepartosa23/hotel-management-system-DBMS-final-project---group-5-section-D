@@ -11,58 +11,33 @@
 
     // One row per room: the current stay if there is one, otherwise the next
     // upcoming reservation. Past and cancelled stays are ignored.
-    async function getAllRoomsWithStatus() {
-        const [rows] = await db.query(`
-            SELECT
-                r.room_id,
-                r.room_number,
-                r.floor_number,
-                r.room_status,
-                rt.type_name,
-                cur.reservation_id,
-                DATE_FORMAT(cur.check_in_date, '%Y-%m-%d') AS check_in_date,
-                DATE_FORMAT(cur.check_out_date, '%Y-%m-%d') AS check_out_date,
-                cur.reservation_status,
-                cur.first_name,
-                cur.guest_id,
-                CASE
-                    WHEN cur.reservation_id IS NOT NULL
-                        AND cur.check_in_date <= CURDATE()
-                        AND cur.reservation_status IN (${OCCUPYING_STATUSES})
-                    THEN 'Occupied'
-                    ELSE 'Available'
-                END AS occupancy
-            FROM rooms r
-            LEFT JOIN room_types rt
-                ON r.room_type_id = rt.room_type_id
-            LEFT JOIN (
-                SELECT
-                    rr.room_id,
-                    res.reservation_id,
-                    res.check_in_date,
-                    res.check_out_date,
-                    res.reservation_status,
-                    g.first_name,
-                    g.guest_id,
-                    ROW_NUMBER() OVER (
-                        PARTITION BY rr.room_id
-                        ORDER BY (res.check_in_date <= CURDATE()) DESC,
-                                res.check_in_date ASC
-                    ) AS rn
-                FROM reservation_rooms rr
-                INNER JOIN reservations res
-                    ON rr.reservation_id = res.reservation_id
-                LEFT JOIN guests g
-                    ON res.guest_id = g.guest_id
-                WHERE res.reservation_status IN (${LIVE_STATUSES})
-                AND res.check_out_date > CURDATE()
-            ) cur
-                ON cur.room_id = r.room_id AND cur.rn = 1
-            ORDER BY r.room_number
-        `);
+   async function getAllRoomsWithStatus() {
+    const [rows] = await db.query(`
+        SELECT
+            r.room_id,
+            r.room_number,
+            r.type_name,
+            r.price_per_night,
+            res.reservation_id,
+            res.check_in_date,
+            res.check_out_date,
+            res.reservation_status,
+            g.first_name,
+            g.last_name
+        FROM rooms r
+        LEFT JOIN reservation_rooms rr ON r.room_id = rr.room_id
+        LEFT JOIN reservations res 
+            ON rr.reservation_id = res.reservation_id
+            AND res.reservation_status = 'Confirmed'
+            AND res.check_out_date >= CURDATE()
+        LEFT JOIN guests g ON res.guest_id = g.guest_id
+        ORDER BY r.room_number
+    `);
+    return rows;
+}
 
-        return rows;
-    }
+module.exports = { getAllRoomsWithStatus };
+ 
 
     // Service orders of the room's current (or next) reservation only.
     async function getOrdersByRoomId(roomId) {

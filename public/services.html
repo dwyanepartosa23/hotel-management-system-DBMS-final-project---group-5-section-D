@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Services | Lumière Grand</title>
+    <title>Services | LumiÃ¨re Grand</title>
     <link rel="stylesheet" href="style.css">
     <style>
         .lookup-box {
@@ -122,18 +122,20 @@
 
     <header class="site-header">
         <a href="index.html" class="brand">
-            <span>LUMIÈRE GRAND</span>
+            <span>LUMIÃˆRE GRAND</span>
             <small>HOTEL & HOSPITALITY</small>
         </a>
         <nav class="site-nav">
+            
             <a href="index.html">Home</a>
             <a href="rooms.html">Rooms & Suites</a>
             <a href="reservations.html">Reservations</a>
-            <a href="invoices.html">Invoices</a>
-            <a href="services.html" class="active">Services</a>
-            <a href="employees.html">Employees</a>
+            <a href="services.html"class = "active">Services</a>
+            <a href="invoices.html">My Invoice</a>
             <a href="about.html">About Us</a>
             <a href="contact.html">Contact</a>
+            <a href="housekeeping.html">Housekeeping</a>
+            <a href="review.html">Reviews</a>
         </nav>
     </header>
 
@@ -171,7 +173,7 @@
                 <div id="orderList"></div>
                 <div class="order-total">
                     <span>Total Charges</span>
-                    <span id="grandTotal">₱ 0.00</span>
+                    <span id="grandTotal">â‚± 0.00</span>
                 </div>
                 <button class="btn-primary" style="width:100%; margin-top:1.5rem;" onclick="submitOrder()">Place Order</button>
                 <div id="orderMsg" class="message-box"></div>
@@ -180,9 +182,9 @@
     </main>
 
     <footer class="site-footer">
-        <p>LUMIÈRE GRAND</p>
+        <p>LUMIÃˆRE GRAND</p>
         <small>Shining standard of elegance.</small>
-        <small>© 2026 Lumière Grand Hotel & Hospitality</small>
+        <small>Â© 2026 LumiÃ¨re Grand Hotel & Hospitality</small>
     </footer>
 
     <script>
@@ -243,7 +245,7 @@
                 <article class="room-card service-card-clickable" id="svc-${s.service_id}">
                     <h3>${s.service_name}</h3>
                     <p>${s.description || ''}</p>
-                    <p class="price-tag">₱ ${Number(s.service_price).toFixed(2)}</p>
+                    <p class="price-tag">â‚± ${Number(s.service_price).toFixed(2)}</p>
                     <div class="qty-control">
                         <label>Qty:</label>
                         <input type="number" min="1" value="1" id="qty-${s.service_id}">
@@ -254,14 +256,14 @@
         }
 
         function addToCart(id, price, name) {
-            const qty = parseInt(document.getElementById(qty-${id}).value) || 1;
+            const qty = parseInt(document.getElementById(`qty-${id}`).value) || 1;
             const existing = cart.find(i => i.service_id === id);
             if (existing) {
                 existing.quantity += qty;
             } else {
                 cart.push({ service_id: id, name: name, price: price, quantity: qty });
             }
-            document.getElementById(svc-${id}).classList.add('selected');
+            document.getElementById(`svc-${id}`).classList.add('selected');
             updateOrderDisplay();
         }
 
@@ -275,12 +277,12 @@
             box.style.display = 'block';
             list.innerHTML = cart.map(item => `
                 <div class="order-item">
-                    <span>${item.name} × ${item.quantity}</span>
-                    <span>₱ ${(item.price * item.quantity).toFixed(2)}</span>
+                    <span>${item.name} Ã— ${item.quantity}</span>
+                    <span>â‚± ${(item.price * item.quantity).toFixed(2)}</span>
                 </div>
             `).join('');
             const total = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
-            document.getElementById('grandTotal').textContent = ₱ ${total.toFixed(2)};
+            document.getElementById('grandTotal').textContent = `â‚± ${total.toFixed(2)}`;
         }
 
         async function submitOrder() {
@@ -299,7 +301,7 @@
                 if (!data.success) throw new Error(data.message);
 
                 msg.className = 'message-box success';
-                msg.textContent = '✅ Order placed! Added to your invoice.';
+                msg.textContent = 'âœ… Order placed! Added to your invoice.';
                 cart = [];
                 updateOrderDisplay();
                 document.querySelectorAll('.service-card-clickable').forEach(c => c.classList.remove('selected'));
@@ -311,7 +313,3 @@
     </script>
 </body>
 </html>
-
-//Contributor: rabadon
-
-////Module: Services.
