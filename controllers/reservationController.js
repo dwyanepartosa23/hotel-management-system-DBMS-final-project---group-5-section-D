@@ -23,7 +23,7 @@ async function createReservation(req, res) {
             phone,
             room_type,
             check_in,
-            check_out,
+            check_out,  
             guests,
             special_requests
         } = req.body;
