@@ -3,138 +3,574 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoices | Lumi&egrave;re Grand</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="description" content="View your invoice at LumiÃ¨re Grand Hotel.">
+    <title>My Invoice â€” LumiÃ¨re Grand</title>
+
+    <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Lato:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        .message { margin-top: 0.75rem; min-height: 1.2rem; }
-        .message.error { color: #c62828; }
-        .message.success { color: #2e7d32; }
-        .table-wrap { overflow-x: auto; margin-top: 1rem; }
-        .table-wrap table { width: 100%; border-collapse: collapse; }
-        .table-wrap th, .table-wrap td {
-            padding: 0.6rem 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid rgba(128, 128, 128, 0.35);
-            white-space: nowrap;
+        /* =================================
+           LUMIÃˆRE GRAND â€” FULL SITE MATCH
+        ================================= */
+        :root {
+            --black: #080808;
+            --surface: #151515;
+            --surface-light: #1D1D1D;
+            --ivory: #F5F0E1;
+            --champagne: #F7E7CE;
+            --taupe: #B8B09F;
+            --gold: #CDAA70;
+            --border: #39352E;
+            --paid: #7CB342;
+            --unpaid: #FFB74D;
+            --overdue: #EF5350;
+
+            --script: 'Great Vibes', cursive;
+            --elegant: 'Cormorant Garamond', serif;
+            --clean: 'Lato', sans-serif;
         }
-        .row-actions button { margin-right: 0.4rem; cursor: pointer; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--elegant);
+            background: var(--black);
+            color: var(--ivory);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        /* =================================
+           HEADER & NAVIGATION â€” EXACTLY LIKE HOMEPAGE
+        ================================= */
+        .site-header {
+            background: var(--surface);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .brand {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .brand h2 {
+            font-family: var(--script);
+            font-size: 32px;
+            color: var(--champagne);
+            font-weight: 400;
+            line-height: 1.2;
+        }
+
+        .brand span {
+            display: block;
+            font-family: var(--clean);
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: var(--taupe);
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        .site-nav {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .site-nav a {
+            color: var(--taupe);
+            font-family: var(--clean);
+            font-size: 13px;
+            padding: 8px 14px;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .site-nav a:hover,
+        .site-nav a.active {
+            color: var(--gold);
+        }
+
+        .site-nav a.active {
+            border-bottom: 1px solid var(--gold);
+        }
+
+        /* =================================
+           PAGE HERO
+        ================================= */
+        .page-hero {
+            background: var(--surface);
+            color: var(--ivory);
+            text-align: center;
+            padding: 60px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .page-hero h1 {
+            font-family: var(--script);
+            font-size: clamp(48px, 6vw, 72px);
+            color: var(--champagne);
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+
+        .page-hero p {
+            max-width: 650px;
+            margin: 0 auto;
+            color: var(--taupe);
+            font-family: var(--clean);
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        /* =================================
+           MAIN CONTENT
+        ================================= */
+        .content-section {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 65px 25px;
+        }
+
+        /* FORM CARD */
+        .form-container {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 35px;
+            border-radius: 3px;
+            margin-bottom: 40px;
+        }
+
+        .form-container label {
+            display: block;
+            color: var(--champagne);
+            font-family: var(--clean);
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .form-container input {
+            width: 100%;
+            padding: 13px 16px;
+            border: 1px solid var(--border);
+            background: var(--black);
+            color: var(--ivory);
+            font-family: var(--elegant);
+            font-size: 17px;
+            border-radius: 2px;
+            margin-bottom: 20px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-container input:focus {
+            border-color: var(--gold);
+        }
+
+        .form-container input::placeholder {
+            color: var(--taupe);
+            opacity: 0.7;
+        }
+
+        .primary-button {
+            display: inline-block;
+            width: 100%;
+            padding: 14px 35px;
+            background: var(--gold);
+            color: var(--black);
+            font-family: var(--clean);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: 1px solid var(--gold);
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .primary-button:hover {
+            background: transparent;
+            color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        .error-box {
+            margin-top: 15px;
+            padding: 12px 16px;
+            background: rgba(239, 83, 80, 0.1);
+            border-left: 2px solid var(--overdue);
+            color: var(--overdue);
+            font-family: var(--clean);
+            font-size: 13px;
+            display: none;
+        }
+
+        /* RESULTS AREA */
+        .results-section {
+            display: none;
+        }
+
+        .guest-header {
+            text-align: center;
+            padding-bottom: 25px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .guest-header h2 {
+            font-family: var(--script);
+            font-size: 42px;
+            color: var(--gold);
+            font-weight: 400;
+            margin-bottom: 8px;
+        }
+
+        .guest-header p {
+            color: var(--taupe);
+            font-family: var(--clean);
+            font-size: 13px;
+        }
+
+        /* RESERVATION CARD */
+        .reservation-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 35px;
+            margin-bottom: 25px;
+            transition: border-color 0.3s ease;
+        }
+
+        .reservation-card:hover {
+            border-color: var(--gold);
+        }
+
+        .reservation-title {
+            font-family: var(--script);
+            font-size: 32px;
+            color: var(--champagne);
+            font-weight: 400;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 16px;
+        }
+
+        .detail-row span:first-child {
+            color: var(--taupe);
+        }
+
+        .section-heading {
+            font-family: var(--clean);
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin: 25px 0 12px;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .total-row {
+            font-size: 18px;
+            font-weight: 600;
+            padding-top: 12px;
+            margin-top: 8px;
+            border-top: 1px solid var(--border);
+        }
+
+        .status-paid { color: var(--paid); }
+        .status-unpaid { color: var(--unpaid); }
+        .status-overdue { color: var(--overdue); }
+
+        .no-data {
+            color: var(--taupe);
+            font-style: italic;
+            font-size: 15px;
+        }
+
+        .balance-due {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--overdue);
+        }
+
+        .link-back {
+            display: block;
+            text-align: center;
+            margin-top: 40px;
+            color: var(--gold);
+            font-family: var(--clean);
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: opacity 0.3s;
+        }
+
+        .link-back:hover {
+            opacity: 0.7;
+        }
+
+        /* FOOTER â€” MATCHES SITE */
+        .site-footer {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .site-footer h2 {
+            font-family: var(--script);
+            font-size: 32px;
+            color: var(--champagne);
+            margin-bottom: 10px;
+        }
+
+        .site-footer p {
+            color: var(--taupe);
+            font-family: var(--clean);
+            font-size: 13px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .site-header {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+            .content-section {
+                padding: 45px 20px;
+            }
+            .form-container,
+            .reservation-card {
+                padding: 25px;
+            }
+            .detail-row {
+                flex-direction: column;
+                gap: 2px;
+            }
+        }
     </style>
 </head>
 <body>
 
+    <!-- HEADER & NAVIGATION â€” EXACTLY LIKE YOUR HOMEPAGE âœ… -->
     <header class="site-header">
         <a href="index.html" class="brand">
-            <span>LUMI&Egrave;RE GRAND</span>
-            <small>HOTEL &amp; HOSPITALITY</small>
+            <h2>LumiÃ¨re Grand</h2>
+            <span>HOTEL & HOSPITALITY</span>
         </a>
 
-        <nav class="main-nav">
+        <nav class="site-nav">
             <a href="index.html">Home</a>
-            <a href="rooms.html">Rooms &amp; Suites</a>
-            <a href="reservation.html">Reservations</a>
+            <a href="rooms.html">Rooms & Suites</a>
+            <a href="reservations.html">Reservations</a>
             <a href="services.html">Services</a>
             <a href="invoices.html" class="active">Invoices</a>
+            <a href="employees.html">Employees</a>
             <a href="about.html">About Us</a>
             <a href="contact.html">Contact</a>
         </nav>
     </header>
 
-    <main>
-        <section class="page-hero">
-            <p class="eyebrow">BILLING</p>
-            <h1>Invoices</h1>
-            <p>Create and manage guest invoices, and review what has been paid.</p>
-        </section>
+    <!-- PAGE HERO -->
+    <section class="page-hero">
+        <h1>My Invoice</h1>
+        <p>Enter your email address to view your booking details and charges</p>
+    </section>
 
-        <section class="content-section">
-            <div class="form-container">
-                <h2 id="form-title">Add Invoice</h2>
+    <!-- MAIN CONTENT -->
+    <main class="content-section">
+        
+        <!-- LOOKUP FORM -->
+        <div class="form-container">
+            <label for="email">Email Address</label>
+            <input 
+                type="email" 
+                id="email" 
+                placeholder="your@email.com"
+                required
+            >
+            <button class="primary-button" onclick="lookupInvoice()">View My Charges</button>
+            <div class="error-box" id="errorBox"></div>
+        </div>
 
-                <form id="invoice-form">
-                    <input type="hidden" id="invoice-id">
+        <!-- RESULTS -->
+        <div class="results-section" id="resultsContainer">
+            <div class="guest-header" id="guestHeader"></div>
+            <div id="reservationsContainer"></div>
+        </div>
 
-                    <label for="reservation-id">Reservation ID</label>
-                    <input type="number" id="reservation-id" min="1" required>
-
-                    <label for="invoice-date">Invoice Date</label>
-                    <input type="date" id="invoice-date">
-
-                    <label for="room-charges">Room Charges</label>
-                    <input type="number" id="room-charges" min="0" step="0.01" required>
-
-                    <label for="service-charges">Service Charges</label>
-                    <input type="number" id="service-charges" min="0" step="0.01" value="0">
-
-                    <label for="invoice-status">Status</label>
-                    <select id="invoice-status" required>
-                        <option value="Unpaid">Unpaid</option>
-                        <option value="Partially Paid">Partially Paid</option>
-                        <option value="Paid">Paid</option>
-                        <option value="Cancelled">Cancelled</option>
-                    </select>
-
-                    <button type="submit" class="btn" id="submit-button">Save Invoice</button>
-                    <button type="button" class="btn" id="cancel-button" hidden>Cancel Edit</button>
-                </form>
-
-                <p id="form-message" class="message"></p>
-            </div>
-        </section>
-
-        <section class="content-section">
-            <h2>All Invoices</h2>
-            <p id="table-message" class="message"></p>
-
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Reservation</th>
-                            <th>Guest</th>
-                            <th>Date</th>
-                            <th>Room Charges</th>
-                            <th>Service Charges</th>
-                            <th>Total</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="invoice-table-body"></tbody>
-                </table>
-            </div>
-        </section>
-
-        <section class="content-section">
-            <h2>Invoice and Payment Report</h2>
-            <p>Shows every invoice with how much has been paid and the remaining balance.</p>
-            <button type="button" class="btn" id="report-button">Load Report</button>
-            <p id="report-message" class="message"></p>
-
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Invoice</th>
-                            <th>Reservation</th>
-                            <th>Date</th>
-                            <th>Total</th>
-                            <th>Total Paid</th>
-                            <th>Remaining Balance</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="report-table-body"></tbody>
-                </table>
-            </div>
-        </section>
+        <a href="index.html" class="link-back">â† Return to Home</a>
     </main>
 
+    <!-- FOOTER â€” MATCHES YOUR HOMEPAGE -->
     <footer class="site-footer">
-        <p>LUMI&Egrave;RE GRAND</p>
-        <small>Shining standard of elegance.</small>
+        <h2>LumiÃ¨re Grand</h2>
+        <p>Shining standard of elegance.</p>
+        <p>&copy; 2026 LumiÃ¨re Grand. All Rights Reserved.</p>
     </footer>
 
-    <script src="invoices.js"></script>
+    <script>
+        async function lookupInvoice() {
+            const email = document.getElementById('email').value.trim();
+            const errorBox = document.getElementById('errorBox');
+            const resultsContainer = document.getElementById('resultsContainer');
+            const guestHeader = document.getElementById('guestHeader');
+            const reservationsContainer = document.getElementById('reservationsContainer');
+
+            // Reset
+            errorBox.style.display = 'none';
+            resultsContainer.style.display = 'none';
+            reservationsContainer.innerHTML = '';
+
+            if (!email) {
+                errorBox.textContent = 'Please enter your email address.';
+                errorBox.style.display = 'block';
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/guest/lookup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ identifier: email })
+                });
+
+                const data = await res.json();
+
+                if (!data.success) {
+                    errorBox.textContent = data.message || 'No records found. Please check your email.';
+                    errorBox.style.display = 'block';
+                    return;
+                }
+
+                const guest = data.data.guest;
+                
+                // Guest Header
+                guestHeader.innerHTML = `
+                    <h2>${guest.first_name} ${guest.last_name || ''}</h2>
+                    <p>${guest.email}</p>
+                    ${guest.phone ? <p>${guest.phone}</p> : ''}
+                `;
+
+                // Reservations
+                data.data.reservations.forEach(res => {
+                    const statusClass = res.invoice
+                        ? (res.invoice.balance_due <= 0 ? 'status-paid' : 
+                           res.invoice.payment_status === 'Overdue' ? 'status-overdue' : 'status-unpaid')
+                        : '';
+                    
+                    const statusLabel = res.invoice
+                        ? (res.invoice.balance_due <= 0 ? 'âœ… Fully Paid' : res.invoice.payment_status)
+                        : 'â³ Pending';
+
+                    reservationsContainer.innerHTML += `
+                        <div class="
+reservation-card">
+                                <h3 class="reservation-title">Reservation #${res.reservation_id}</h3>
+                                
+                                <div class="detail-row">
+                                    <span>Check-in Date</span>
+                                    <span>${res.check_in_date}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Check-out Date</span>
+                                    <span>${res.check_out_date}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Number of Nights</span>
+                                    <span>${res.nights}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Status</span>
+                                    <span class="${statusClass}">${statusLabel}</span>
+                                </div>
+
+                                <h4 class="section-heading">Room Charges</h4>
+                                ${res.rooms.length === 0 ? '<p class="no-data">No room assigned</p>' :
+                                    res.rooms.map(room => `
+                                        <div class="detail-row">
+                                            <span>${room.type_name} â€” Room #${room.room_number}</span>
+                                            <span>â‚±${(Number(room.price_per_night) * res.nights).toFixed(2)}</span>
+                                        </div>
+                                    `).join('')
+                                }
+                                <div class="detail-row total-row">
+                                    <span>Room Total</span>
+                                    <span>â‚±${(res.room_total || 0).toFixed(2)}</span>
+                                </div>
+
+                                <h4 class="section-heading">Additional Services</h4>
+                                ${res.services.length === 0 ? 
+                                    '<p class="no-data">No additional services ordered</p>' :
+                                    res.services.map(svc => `
+                                        <div class="detail-row">
+                                            <span>${svc.service_name} Ã— ${svc.quantity || 1}</span>
+                                            <span>â‚±${Number(svc.total_price || 0).toFixed(2)}</span>
+                                        </div>
+                                    `).join('')
+                                }
+                                <div class="detail-row">
+                                    <span>Services Total</span>
+                                    <span>â‚±${Number(res.service_total || 0).toFixed(2)}</span>
+                                </div>
+
+                                ${res.invoice ? `
+                                    <h4 class="section-heading">Invoice Summary</h4>
+                                    <div class="detail-row total-row">
+                                        <span>Total Amount</span>
+                                        <span>â‚±${Number(res.invoice.total_amount || 0).toFixed(2)}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Amount Paid</span>
+                                        <span>â‚±${(Number(res.invoice.total_amount || 0) - Number(res.invoice.balance_due || 0)).toFixed(2)}</span>
+                                    </div>
+                                    <div class="detail-row total-row balance-due">
+                                        <span>Balance Due</span>
+                                        <span>â‚±${Number(res.invoice.balance_due || 0).toFixed(2)}</span>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                    });
+
+                    resultsContainer.style.display = 'block';
+
+                } catch (err) {
+                    console.error(err);
+                    errorBox.textContent = 'Unable to load your invoice. Please try again later.';
+                    errorBox.style.display = 'block';
+                }
+            }
+    </script>
 </body>
 </html>
