@@ -568,3 +568,283 @@ body {
         font-size: 10px;
     }
 }
+
+/* EMPLOYEE DASHBOARD */
+
+.employee-dashboard {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    margin: 30px 0;
+}
+
+.employee-stat-card {
+    background: #151515;
+    border: 1px solid #39352E;
+    padding: 30px;
+    border-radius: 8px;
+}
+
+.employee-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.employee-table-container {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #39352E;
+    border-radius: 8px;
+    background: #151515;
+}
+
+.employee-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 750px;
+}
+
+.employee-table th,
+.employee-table td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #39352E;
+}
+
+.employee-table th {
+    background: #1D1D1D;
+    color: #CDAA70;
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.employee-table-container {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #39352E;
+    border-radius: 8px;
+    background: #151515;
+}
+
+.employee-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 750px;
+}
+
+.employee-table th,
+.employee-table td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #39352E;
+}
+
+.employee-table th {
+    background: #1D1D1D;
+    color: #CDAA70;
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.employee-table td {
+    color: #F5F0E1;
+}
+
+.employee-stat-card h3 {
+    color: #F7E7CE;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.employee-stat-card p {
+    color: #CDAA70;
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0;
+}
+
+#addEmployeeBtn {
+    background: #CDAA70;
+    color: #080808;
+    border: 1px solid #CDAA70;
+    padding: 12px 22px;
+    cursor: pointer;
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+#addEmployeeBtn:hover {
+    background: transparent;
+    color: #CDAA70;
+}
+
+.employee-form {
+    background: #151515;
+    border: 1px solid #39352E;
+    border-radius: 8px;
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+.employee-form h2 {
+    color: #F7E7CE;
+    margin-bottom: 20px;
+}
+
+.employee-form input,
+.employee-form select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    background: #080808;
+    color: #F5F0E1;
+    border: 1px solid #39352E;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.employee-form button {
+    padding: 12px 20px;
+    margin-right: 8px;
+    background: #CDAA70;
+    color: #080808;
+    border: 1px solid #CDAA70;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+.employee-form button:hover {
+    background: transparent;
+    color: #CDAA70;
+}
+
+/* EMPLOYEE ACTION BUTTONS */
+
+.edit-btn,
+.delete-btn {
+    padding: 9px 16px;
+    margin: 3px;
+    font-family: 'Lato', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* EDIT BUTTON */
+.edit-btn {
+    background: #CDAA70;
+    color: #080808;
+    border: 1px solid #CDAA70;
+}
+
+.edit-btn:hover {
+    background: transparent;
+    color: #CDAA70;
+}
+
+/* DELETE BUTTON */
+.delete-btn {
+    background: transparent;
+    color: #C87979;
+    border: 1px solid #754747;
+}
+
+.delete-btn:hover {
+    background: #754747;
+    color: #F5F0E1;
+}
+
+/* =================================
+   EMPLOYEE MANAGEMENT RESPONSIVE
+================================= */
+
+/* TABLET AND SMALLER SCREENS */
+@media screen and (max-width: 768px) {
+
+    .employee-dashboard {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin: 20px 0;
+    }
+
+    .employee-stat-card {
+        padding: 20px;
+    }
+
+    .employee-stat-card p {
+        font-size: 26px;
+    }
+
+    .employee-list-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    #addEmployeeBtn {
+        width: 100%;
+    }
+
+    .employee-form {
+        padding: 20px;
+    }
+
+    .employee-table {
+        min-width: 750px;
+    }
+}
+
+/* MOBILE PHONES */
+@media screen and (max-width: 480px) {
+
+    .employee-dashboard {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .employee-stat-card {
+        padding: 18px;
+    }
+
+    .employee-stat-card h3 {
+        font-size: 14px;
+    }
+
+    .employee-stat-card p {
+        font-size: 24px;
+    }
+
+    .employee-list-header h2 {
+        font-size: 22px;
+    }
+
+    .employee-form {
+        padding: 15px;
+    }
+
+    .employee-form button {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .edit-btn,
+    .delete-btn {
+        padding: 10px 14px;
+        margin: 4px 2px;
+    }
+}

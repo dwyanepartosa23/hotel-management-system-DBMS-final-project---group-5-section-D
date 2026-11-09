@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Employee Management | Lumière Grand</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+    <header class="site-header">
+
+        <a href="index.html" class="brand">
+            <h2>Lumière Grand</h2>
+            <span>HOTEL & HOSPITALITY</span>
+        </a>
+
+    <nav class="site-nav">
+        <a href="index.html">Home</a>
+        <a href="employees.html" class="active">Employees</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+
+    </header>
+
+    <!-- EMPLOYEE MANAGEMENT -->
+    <main>
+
+        <section class="page-hero">
+            <h1>Employee Management</h1>
+            <p>Manage hotel employees and their information.</p>
+        </section>
+
+        <section class="content-section">
+
+            <h2>Our Employees</h2>
+
+            <!-- EMPLOYEE DASHBOARD -->
+            <div class="employee-dashboard">
+
+                <div class="employee-stat-card">
+                    <h3>Total Employees</h3>
+                    <p id="totalEmployees">0</p>
+                </div>
+
+                <div class="employee-stat-card">
+                    <h3>Available Positions</h3>
+                    <p>6</p>
+                </div>
+
+            </div>
+
+            <!-- EMPLOYEE LIST -->
+            <div class="employee-list-section">
+
+                <div class="employee-list-header">
+                    <h2>Employee Records</h2>
+
+                    <button type="button" id="addEmployeeBtn" class="btn">
+                        + Add Employee
+                    </button>
+                </div>
+
+                <!-- ADD EMPLOYEE FORM -->
+                <form id="employeeForm" class="employee-form" style="display: none;">
+
+                    <h2>Add Employee</h2>
+
+                    <input type="text" id="first_name" placeholder="First Name" required>
+
+                    <input type="text" id="last_name" placeholder="Last Name" required>
+
+                    <input type="text" id="phone" placeholder="Phone">
+
+                    <input type="email" id="email" placeholder="Email">
+
+                    <select id="position_id" required>
+                            <option value="">Select Position</option>
+                            <option value="31">Manager</option>
+                            <option value="32">Receptionist</option>
+                            <option value="33">House keeper</option>
+                            <option value="34">Maintenance staff</option>
+                            <option value="35">Accountant</option>
+                            <option value="36">Hotel staff</option>
+                    </select>
+
+                    <button type="submit">Save Employee</button>
+
+                    <button type="button" id="cancelEmployeeBtn">
+                        Cancel
+                    </button>
+
+                </form>
+
+                <!-- EMPLOYEE TABLE -->
+                <div class="employee-table-container">
+
+                    <table class="employee-table">
+
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Employee Name</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Position</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="employeeTableBody">
+                            <tr>
+                                <td colspan="6">Loading employees...</td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+
+        <h2>Lumière Grand</h2>
+        <p>Shining standard of elegance.</p>
+
+        <p>&copy; 2026 Lumière Grand. All Rights Reserved.</p>
+
+    </footer>
+
+    <!-- FORM TOGGLE -->
+    <script>
+        const addEmployeeBtn = document.getElementById('addEmployeeBtn');
+        const employeeForm = document.getElementById('employeeForm');
+        const cancelEmployeeBtn = document.getElementById('cancelEmployeeBtn');
+
+        addEmployeeBtn.addEventListener('click', function () {
+            employeeForm.style.display = 'block';
+        });
+
+        cancelEmployeeBtn.addEventListener('click', function () {
+            employeeForm.style.display = 'none';
+            employeeForm.reset();
+        });
+    </script>
+
+<script src="employees.js"></script>
+
+</body>
+
+</html>

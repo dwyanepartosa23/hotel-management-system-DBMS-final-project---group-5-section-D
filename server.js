@@ -11,10 +11,14 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ==========================================
-// PAGE ROUTES
+// PAGE ROUTES — COMBINED
 // ==========================================
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/room-records', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'room-records.html'));
 });
 
 app.get('/rooms', (req, res) => {
@@ -70,7 +74,7 @@ app.get('/api/test-db', async (req, res) => {
 });
 
 // ==========================================
-// GUEST LOOKUP API — Find by Email or ID
+// GUEST LOOKUP API
 // ==========================================
 const lookupRouter = express.Router();
 lookupRouter.post('/lookup', async (req, res) => {
@@ -108,22 +112,20 @@ app.post('/api/service-orders/add', async (req, res) => {
     try {
         const { reservation_id, items } = req.body;
         if (!reservation_id || !items || !items.length) {
-            return res.status(400).json({ 
-                success: false, 
-                message: 'Missing order details' 
+            return res.status(400).json({
+                success: false,
+                message: 'Missing order details'
             });
         }
-
         for (const item of items) {
             await addServiceOrder(reservation_id, item.service_id, item.quantity);
         }
-
         res.json({ success: true, message: 'Services added to your invoice' });
     } catch (err) {
         console.error('Order error:', err);
-        res.status(500).json({ 
-            success: false, 
-            message: err.message || 'Failed to place order' 
+        res.status(500).json({
+            success: false,
+            message: err.message || 'Failed to place order'
         });
     }
 });
@@ -141,6 +143,7 @@ const serviceOrderRoutes = require('./routes/serviceOrderRoutes');
 const invoiceRoutes = require('./routes/invoiceRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const reportRoutes = require('./routes/reportRoutes');
+const recordRoutes = require('./routes/recordRoutes');
 
 app.use('/api/guests', guestRoutes);
 app.use('/api/rooms', roomRoutes);
@@ -152,8 +155,11 @@ app.use('/api/service-orders', serviceOrderRoutes);
 app.use('/api/invoices', invoiceRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/reports', reportRoutes);
+app.use('/api/room-records', recordRoutes);
 
+// ==========================================
 // 404 Handlers — MUST BE LAST
+// ==========================================
 app.use('/api', (req, res) => {
     res.status(404).json({
         success: false,
@@ -171,8 +177,8 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 1234;
 
 const server = app.listen(PORT, () => {
-    console.log(✅ Server running at http://localhost:${PORT});
-    console.log(✅ Guest Invoice Page: http://localhost:${PORT}/guest-invoice);
+    console.log(`Server running at http://localhost:${PORT}`);
+    console.log(`Guest Invoice Page: http://localhost:${PORT}/guest-invoice`);
 });
 
 server.on('error', (error) => {
@@ -180,5 +186,4 @@ server.on('error', (error) => {
 });
 
 //Contributor: rabadon
-
 ////Module: Services
