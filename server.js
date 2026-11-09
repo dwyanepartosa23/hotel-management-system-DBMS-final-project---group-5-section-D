@@ -9,9 +9,7 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ==========================================
 // PAGE ROUTES — COMBINED
-// ==========================================
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
@@ -52,9 +50,11 @@ app.get('/contact', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'contact.html'));
 });
 
-// ==========================================
+app.get('/reviews', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'reviews.html'));
+});
+
 // API TEST ROUTE
-// ==========================================
 app.get('/api/test-db', async (req, res) => {
     try {
         const [rows] = await db.query('SELECT DATABASE() AS database_name');
@@ -72,9 +72,7 @@ app.get('/api/test-db', async (req, res) => {
     }
 });
 
-// ==========================================
 // GUEST LOOKUP API
-// ==========================================
 const lookupRouter = express.Router();
 lookupRouter.post('/lookup', async (req, res) => {
     try {
@@ -104,9 +102,7 @@ lookupRouter.post('/lookup', async (req, res) => {
 });
 app.use('/api/guest', lookupRouter);
 
-// ==========================================
 // OTHER API ROUTES
-// ==========================================
 const guestRoutes = require('./routes/guestRoutes');
 const roomRoutes = require('./routes/roomRoutes');
 const housekeepingRoutes = require('./routes/housekeepingRoutes');
@@ -143,9 +139,7 @@ app.use((req, res) => {
     res.status(404).send('Page not found.');
 });
 
-// ==========================================
 // START SERVER
-// ==========================================
 const PORT = process.env.PORT || 1234;
 
 const server = app.listen(PORT, () => {
@@ -155,4 +149,12 @@ const server = app.listen(PORT, () => {
 
 server.on('error', (error) => {
     console.error('Server error:', error);
+});
+
+server.on('close', () => {
+    console.log('Server closed.');
+});
+
+process.on('beforeExit', () => {
+    console.log('Node.js is about to exit.');
 });
